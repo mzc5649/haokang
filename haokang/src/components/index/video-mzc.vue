@@ -30,6 +30,9 @@
 
     export default {
         name: "animate-mzc",
+        props:{
+            videoClassify:Number
+        },
         data() {
             return {
                 rankData: [{
@@ -37,7 +40,6 @@
                 }
                 ],
                 videoData: [
-
                     {
                         title: '123123',
                         author: 'mzc',
