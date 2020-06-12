@@ -3,7 +3,7 @@
         <Row :gutter="10">
             <Col span="16">
                 <div style="height: 30px;display: flex;justify-content: flex-start;font-size: 18px">
-                    动画
+                    <slot>视频</slot>
                 </div>
                 <Row :gutter="10">
                     <template v-for="(item,index) in videoData">

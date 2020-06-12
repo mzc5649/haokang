@@ -1,13 +1,17 @@
 <template>
 
-        <div style="display: flex; align-items: center;margin-left: 50%;transform: translateX(-50%);height: 35px">
+        <div style="display: flex; align-items: center;margin-left: 50%;transform: translateX(-50%);height: 36px">
             <input class="switch-btn switch-btn-animbg" @click="switchClick" type="checkbox" checked>
             <transition name="custom-classes-transition"
                         enter-active-class="animate__animated animate__zoomIn"
                         leave-active-class="animate__animated animate__zoomOut"
             >
                 <div v-show="isShow" class="in_d" style="display: flex;align-items: center;">
-                    <Input ref="dm" v-model="danMuContent" placeholder="发个友善的弹幕见证当下" style="width: 200px"/>
+                    <Select v-model="direction" style="width:65px">
+                        <Option value="default">默认</Option>
+                        <Option value="top">顶部</Option>
+                    </Select>
+                    <Input ref="dm"   v-model="danMuContent" placeholder="发个友善的弹幕见证当下" style="width: 180px"/>
                     <ColorPicker v-model="color" recommend />
                     <Button type="primary" @click="sendDanMu">发送</Button>
                 </div>
@@ -26,7 +30,8 @@
                 color:'#FFFFFF',
                 isShow: true,
                 danMuContent: '',
-                danMuIsShow: true
+                danMuIsShow: true,
+                direction:'default'
             }
         },
         methods: {
@@ -36,7 +41,7 @@
                 this.$emit('switchDmShow', this.danMuIsShow)
             },
             sendDanMu() {
-                this.$emit('sendDanMu', this.danMuContent,this.color);
+                this.$emit('sendDanMu', this.danMuContent,this.color,this.direction);
                 this.danMuContent='';
             }
         }

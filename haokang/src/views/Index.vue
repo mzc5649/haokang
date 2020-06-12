@@ -6,9 +6,29 @@
             <Content id="content" >
                 <ClassifyMzc :data="classifyData" ></ClassifyMzc>
                 <RecommendMzc></RecommendMzc>
-                <AnimateMzc ></AnimateMzc>
-<!--                <AnimateMzc></AnimateMzc>-->
-<!--                <AnimateMzc></AnimateMzc>-->
+                <SortMzc>
+                    <template v-slot:sort>
+                       动画
+                    </template>
+                    <template v-slot:video>
+                        <VideoMzc></VideoMzc>
+                    </template>
+                    <template v-slot:article>
+                        <ArticleMzc></ArticleMzc>
+                    </template>
+                </SortMzc>
+                <SortMzc>
+                    <template v-slot:sort>
+                        搞笑
+                    </template>
+                    <template v-slot:video>
+                        <VideoMzc></VideoMzc>
+                    </template>
+                    <template v-slot:article>
+                        <ArticleMzc></ArticleMzc>
+                    </template>
+                </SortMzc>
+
             </Content>
             <Footer id="footer">
                 <FooterZzj></FooterZzj>
@@ -23,11 +43,13 @@
 <script>
     import ClassifyMzc from "../components/index/classify-mzc";
     import RecommendMzc from "../components/index/recommend-mzc";
-    import AnimateMzc from "../components/index/animate-mzc";
+    import VideoMzc from "../components/index/video-mzc";
     import FooterZzj from "../components/index/footer-zzj";
+    import SortMzc from "../components/index/sort-mzc";
+    import ArticleMzc from "../components/index/article-mzc";
     export default {
         name: "Index",
-        components: {FooterZzj, AnimateMzc, RecommendMzc, ClassifyMzc},
+        components: { SortMzc, FooterZzj, VideoMzc, RecommendMzc, ClassifyMzc,ArticleMzc},
         data(){
             return{
                 classifyData:["动画","电影","舞蹈","知识","科技","动画","电影","舞蹈","知识","科技","动画","电影","舞蹈","知识","科技","动画"],

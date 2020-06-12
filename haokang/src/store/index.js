@@ -6,8 +6,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        danMuList: [],
-        m_id:1
+        danMuList: [],//弹幕列表
+        m_id:1 //当前登录用户id
     },
     mutations: {
         addToDanMuList(state, info) {
@@ -15,7 +15,7 @@ export default new Vuex.Store({
                 if(info[i].m_id==state.m_id){
                     let data = {
                         content: info[i].content,
-                        direction: 'default',
+                        direction: info[i].direction,
                         isSelf: true,
                         style: {
                             color: info[i].color
@@ -26,7 +26,7 @@ export default new Vuex.Store({
                 }else{
                     let data = {
                         content: info[i].content,
-                        direction: 'default',
+                        direction: info[i].direction,
                         isSelf: false,
                         style: {
                             color: info[i].color

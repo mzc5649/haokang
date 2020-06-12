@@ -8,6 +8,8 @@ import AOS from "aos"
 import "aos/dist/aos.css"
 import animated from 'animate.css'
 import axios from 'axios'
+import Video from 'video.js'
+Vue.prototype.$video = Video
 Vue.prototype.axios = axios;
 Vue.use(animated)
 Vue.config.productionTip = false;
