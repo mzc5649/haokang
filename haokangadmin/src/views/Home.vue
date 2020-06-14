@@ -6,7 +6,11 @@
         <Sider >
         <LeftSide style="width: 100%"></LeftSide>
         </Sider>
-        <Content>Content</Content>
+        <Content>
+
+            <router-view ></router-view>
+
+        </Content>
       </Layout>
       <Footer>Footer</Footer>
     </Layout>
@@ -17,7 +21,7 @@
 // @ is an alias to /src
 
 
-import LeftSide from "@/components/leftSide";
+import LeftSide from "@/components/LeftSide";
 export default {
   name: "Home",
   components: {

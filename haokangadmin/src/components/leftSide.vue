@@ -1,21 +1,21 @@
 <template>
-        <Menu :theme="theme">
+        <Menu :theme="theme" :active-name="$route.name">
             <Submenu name="1">
                 <template slot="title">
-                    <Icon type="ios-paper" />
+                    <Icon type="ios-paper"/>
                     会员管理
                 </template>
-                <MenuItem name="1-1">所有会员</MenuItem>
+                <MenuItem name="Member" to="/member">所有会员</MenuItem>
                 <MenuItem name="1-2">新增会员</MenuItem>
                 <MenuItem name="1-3">举报管理</MenuItem>
             </Submenu>
             <Submenu name="2">
                 <template slot="title">
                     <Icon type="ios-people" />
-                    用户管理
+                    视频管理
                 </template>
-                <MenuItem name="2-1">新增用户</MenuItem>
-                <MenuItem name="2-2">活跃用户</MenuItem>
+                <MenuItem name="Video" to="/video">所有视频</MenuItem>
+                <MenuItem name="VideoAdd" to="/videoAdd">添加视频</MenuItem>
             </Submenu>
             <Submenu name="3">
                 <template slot="title">
