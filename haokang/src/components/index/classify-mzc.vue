@@ -8,8 +8,8 @@
                 <div class="classify-mid">
                     <template v-for="(item , index) in data">
                         <a :key="index" class="classify-item">
-                            {{item}}
-                            <ClassifyTagMzc></ClassifyTagMzc>
+                            {{item.classifyName}}
+                            <ClassifyTagMzc> {{item.classifyNum}}</ClassifyTagMzc>
                         </a>
                     </template>
                 </div>
@@ -30,16 +30,19 @@
     export default {
         name: "classify-mzc",
         components: {ClassifyTagMzc},
-        props: ['data']
+        props: {
+            data: Array
+        }
     }
 
 </script>
 
 <style scoped>
-    .classify{
+    .classify {
         padding-top: 20px;
         padding-bottom: 20px;
     }
+
     .classify-mid {
         display: flex;
         flex-wrap: wrap;

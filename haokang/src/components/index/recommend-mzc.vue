@@ -23,7 +23,7 @@
         </Col>
         <Col span="14">
             <Row :gutter="10">
-                <template v-for="(item ,index) in data">
+                <template v-for="(item ,index) in videoData">
                     <Col :key="index" span="8">
                         <RecommendCard :key="index" :info="item"></RecommendCard>
                     </Col>
@@ -41,65 +41,12 @@
         data() {
             return {
                 value1: 0,
-                data: [
-                    {
-                        title: '狮子“阿廖沙”太活泼了，它喜欢把游客扑倒狮子“阿廖沙”太活泼了，它喜欢把游客扑倒狮子“阿廖沙”太活泼了，它喜欢把游客扑倒狮子“阿廖沙”太活泼了，它喜欢把游客扑倒',
-                        author: '克里米亚野生动物园',
-                        playNum: '10.7万次播放',
-                        style: {
-                            'background-image': 'url(/img/1.jpg)',
-                            'background-size': '100% 120px'
-                        }
-                    },
-                    {
-                        title: '狮子“阿廖沙”太活泼了，它喜欢把游客扑倒狮子“阿廖沙”太活泼了，它喜欢把游客扑倒狮子“阿廖沙”太活泼了，它喜欢把游客扑倒狮子“阿廖沙”太活泼了，它喜欢把游客扑倒',
-                        author: '克里米亚野生动物园',
-                        playNum: '10.7万次播放',
-                        style: {
-                            'background-image': 'url(/img/1.jpg)',
-                            'background-size': '100% 120px'
-                        }
-                    },
-                    {
-                        title: '狮子“阿廖沙”太活泼了，它喜欢把游客扑倒狮子“阿廖沙”太活泼了，它喜欢把游客扑倒狮子“阿廖沙”太活泼了，它喜欢把游客扑倒狮子“阿廖沙”太活泼了，它喜欢把游客扑倒',
-                        author: '克里米亚野生动物园',
-                        playNum: '10.7万次播放',
-                        style: {
-                            'background-image': 'url(/img/1.jpg)',
-                            'background-size': '100% 120px'
-                        }
-                    },
-                    {
-                        title: '狮子“阿廖沙”太活泼了，它喜欢把游客扑倒狮子“阿廖沙”太活泼了，它喜欢把游客扑倒狮子“阿廖沙”太活泼了，它喜欢把游客扑倒狮子“阿廖沙”太活泼了，它喜欢把游客扑倒',
-                        author: '克里米亚野生动物园',
-                        playNum: '10.7万次播放',
-                        style: {
-                            'background-image': 'url(/img/1.jpg)',
-                            'background-size': '100% 120px'
-                        }
-                    },
-                    {
-                        title: '狮子“阿廖沙”太活泼了，它喜欢把游客扑倒狮子“阿廖沙”太活泼了，它喜欢把游客扑倒狮子“阿廖沙”太活泼了，它喜欢把游客扑倒狮子“阿廖沙”太活泼了，它喜欢把游客扑倒',
-                        author: '克里米亚野生动物园',
-                        playNum: '10.7万次播放',
-                        style: {
-                            'background-image': 'url(/img/1.jpg)',
-                            'background-size': '100% 120px'
-                        }
-                    },
-                    {
-                        title: '狮子“阿廖沙”太活泼了，它喜欢把游客扑倒狮子“阿廖沙”太活泼了，它喜欢把游客扑倒狮子“阿廖沙”太活泼了，它喜欢把游客扑倒狮子“阿廖沙”太活泼了，它喜欢把游客扑倒',
-                        author: '克里米亚野生动物园',
-                        playNum: '10.7万次播放',
-                        style: {
-                            'background-image': 'url(/img/1.jpg)',
-                            'background-size': '100% 120px'
-                        }
-                    }
-                ]
             }
         },
-        components: {RecommendCard}
+        components: {RecommendCard},
+        props:{
+            videoData:Array
+        }
     }
 </script>
 

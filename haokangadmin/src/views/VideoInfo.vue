@@ -93,7 +93,9 @@
                     .then(function (data) {
                         that.videoData = data.data.data;
                         that.loading = false;
-                    });
+                    }).catch(function () {
+                    that.$Message.error('获取数据失败');
+                });
         },
         methods:{
             //显示详细数据跳转
@@ -108,7 +110,7 @@
             async (row,index) {
                 // eslint-disable-next-line @typescript-eslint/no-this-alias
                 const that = this;
-                this.$Modal.confirm({
+                that.$Modal.confirm({
                     title: '删除',
                     content: '<p>确认删除id为 '+row.id+' ,标题为 '+row.title+' 的数据吗</p>',
                     loading: true,
@@ -117,16 +119,16 @@
                         .then(function (res) {
                             if(res.data.data){
                                 that.$Modal.remove();
-                                that.$Message.info('删除成功');
+                                that.$Message.success('删除成功');
                                 that.videoData.splice(index,1);
                             }else {
                                 that.$Modal.remove();
-                                that.$Message.info('删除失败');
+                                that.$Message.error('删除失败');
                             }
 
                         }).catch(function () {
                             that.$Modal.remove();
-                            that.$Message.info('删除失败');
+                            that.$Message.error('删除失败');
 
                         });
                     }

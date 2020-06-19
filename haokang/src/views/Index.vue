@@ -1,34 +1,26 @@
 <template>
     <div class="index">
         <Layout>
-            <Header id="header">
-            </Header>
-            <Content id="content" >
+           <NavBar :member-info="memberInfo" :is-login="isLogin"></NavBar>
+            <Content id="content">
                 <ClassifyMzc :data="classifyData" ></ClassifyMzc>
-                <RecommendMzc></RecommendMzc>
-                <SortMzc>
-                    <template v-slot:sort>
-                       动画
-                    </template>
-                    <template v-slot:video>
-                        <VideoMzc></VideoMzc>
-                    </template>
-                    <template v-slot:article>
-                        <ArticleMzc></ArticleMzc>
-                    </template>
-                </SortMzc>
-                <SortMzc>
-                    <template v-slot:sort>
-                        搞笑
-                    </template>
-                    <template v-slot:video>
-                        <VideoMzc></VideoMzc>
-                    </template>
-                    <template v-slot:article>
-                        <ArticleMzc></ArticleMzc>
-                    </template>
-                </SortMzc>
-
+                <RecommendMzc :video-data="videoHotData"></RecommendMzc>
+                <!--根据种类 显示-->
+                <template v-for="(item,index) in classifyData">
+                    <SortMzc :key="index">
+                        <template v-slot:sort>
+                            {{item.classifyName}}
+                        </template>
+                        <!--视频-->
+                        <template v-slot:video>
+                            <VideoMzc :video-classify="item"></VideoMzc>
+                        </template>
+                        <!--文章-->
+                        <template v-slot:article>
+                            <ArticleMzc></ArticleMzc>
+                        </template>
+                    </SortMzc>
+                </template>
             </Content>
             <Footer id="footer">
                 <FooterZzj></FooterZzj>
@@ -47,19 +39,65 @@
     import FooterZzj from "../components/index/footer-zzj";
     import SortMzc from "../components/index/sort-mzc";
     import ArticleMzc from "../components/index/article-mzc";
+    import NavBar from "../components/NavBar";
     export default {
         name: "Index",
-        components: { SortMzc, FooterZzj, VideoMzc, RecommendMzc, ClassifyMzc,ArticleMzc},
+        components: {NavBar, SortMzc, FooterZzj, VideoMzc, RecommendMzc, ClassifyMzc,ArticleMzc},
         data(){
             return{
-                classifyData:["动画","电影","舞蹈","知识","科技","动画","电影","舞蹈","知识","科技","动画","电影","舞蹈","知识","科技","动画"],
+                classifyData:[],
                 value1:0,
-
-
+                videoHotData:[],
+                memberInfo:{},
+                isLogin:false
             }
         },
         comments:{
             ClassifyMzc
+        },
+        created() {
+            let that=this;
+            //是否登录
+            that.axios.post("/member/m/loginOrNot")
+                .then(function (res) {
+                    if (res.data.code == 0) {
+                        that.$store.state.m_id = res.data.data;
+                        that.isLogin = true;
+                        that.showLogin = false;
+                        that.axios.get("/member/m/" + that.$store.state.m_id)
+                            .then(function (res) {
+                                if (res.data.code == 0) {
+                                    that.memberInfo = res.data.data;
+                                }
+
+                            })
+                    } else {
+                        that.isLogin = false;
+                        that.showLogin = true;
+                    }
+                })
+            //视频分类
+            that.axios.get("/video/vc/")
+            .then(function (res) {
+                that.classifyData=res.data.data;
+            });
+            //获取hot视频
+            that.axios.get("/video/v/hot",
+                {
+                    params:{
+                        pageIndex: 1,
+                        pageNum: 6
+                    }
+                }).then(function (res) {
+                    if(res.data.code==0){
+                        that.videoHotData=res.data.data
+                    }
+
+            })
+
+        },
+        mounted() {
+            document.title='首页'
         }
 
     }
@@ -77,6 +115,7 @@
     }
     #content{
         padding: 0 100px;
+        background-color: white;
     }
     .top{
         padding: 10px;

@@ -1,5 +1,5 @@
 <template>
-    <div class="animate">
+    <div class="article">
         <Row :gutter="10">
             <Col span="16">
                 <div style="height: 30px;display: flex;justify-content: flex-start;font-size: 18px">
@@ -28,7 +28,13 @@
     export default {
         name: "video-mzc",
         data() {
-            return {}
+            return {
+                rankData: [{
+                    title: 'mmmmmm'
+                }
+                ],
+
+            }
         },
         components:{RankMzc,ArticleCardLzr}
     }

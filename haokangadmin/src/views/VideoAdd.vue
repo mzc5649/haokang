@@ -62,16 +62,16 @@
             </FormItem>
             <FormItem>
                 <Button type="primary" @click="upload">Submit</Button>
-                <Button style="margin-left: 8px">清空</Button>
+                <Button style="margin-left: 8px" @click="clearAll">清空</Button>
             </FormItem>
         </Form>
-        <Modal :title="image.name" v-model="imageVisible" >
+        <Modal :title="image.name" v-model="imageVisible">
             <img :src="image.src" v-if="imageVisible" style="width: 100%">
             <div slot="footer">
             </div>
         </Modal>
         <Modal title="上传中......" v-model="uploadVisible" :mask-closable=false :closable=false>
-            <Progress :percent="progress" :stroke-width="20" status="active" text-inside />
+            <Progress :percent="progress" :stroke-width="20" status="active" text-inside/>
             <div slot="footer">
             </div>
         </Modal>
@@ -91,7 +91,7 @@
                 classifyId: '',
                 formDisabled: false,
                 imageVisible: false,
-                uploadVisible:false,
+                uploadVisible: false,
                 imageExist: false,
                 videoExist: false,
                 image: '',
@@ -142,6 +142,18 @@
             handleView() {
                 this.imageVisible = true;
             },
+            clearAll(){
+                // eslint-disable-next-line @typescript-eslint/no-this-alias
+                let that = this;
+                that.form.title = '';
+                that.classifyId = '';
+                that.form.desc = '';
+                that.image = '';
+                that.video = '';
+                that.imageExist=false;
+                that.videoExist=false;
+                that.formDisabled = false;
+            },
             upload() {
                 // eslint-disable-next-line @typescript-eslint/no-this-alias
                 let that = this;
@@ -166,25 +178,33 @@
                     return;
                 }
                 that.formDisabled = true;
-                const formData = new FormData();
+                let formData = new FormData();
                 formData.append('title', that.form.title);
                 formData.append('classifyId', that.classifyId);
                 formData.append('desc', that.form.desc);
                 formData.append('imageFile', that.image);
                 formData.append('videoFile', that.video);
-                const config = {
+                let config = {
                     //添加请求头
                     headers: {"Content-Type": "multipart/form-data"},
                     onUploadProgress: e => {
-                        let completeProgress = ((e.loaded / e.total * 100) | 0) ;
+                        let completeProgress = ((e.loaded / e.total * 100) | 0);
                         that.progress = completeProgress;
                     }
                 }
-                that.uploadVisible=true;
+                that.uploadVisible = true;
                 that.axios.post('/video/upload/', formData, config)
                     .then(function (res) {
-                        that.uploadVisible=false;
+                        that.uploadVisible = false;
                         that.$Message.success('上传成功');
+                        that.form.title = '';
+                        that.classifyId = '';
+                        that.form.desc = '';
+                        that.image = '';
+                        that.video = '';
+                        that.imageExist=false;
+                        that.videoExist=false;
+                        that.formDisabled = false;
                     })
                     .catch(function () {
                         that.$Message.error('上传失败');

@@ -20,6 +20,21 @@ const routes = [
     {
         path: "/home",
         name: "Home",
+        children:[
+            {
+                path: "homeIndex",
+                name:"homeIndex",
+                component:() =>
+                    import("../components/home/homeIndex")
+            },
+            {
+                path: "homeMyInfo",
+                name:"homeMyInfo",
+                component:() =>
+                    import("../components/home/homeMyInfo")
+            },
+
+        ],
         component: () =>
             import("../views/Home")
     },
@@ -30,10 +45,17 @@ const routes = [
             import("../views/Video")
     },
     {
-        path: "/test",
-        name: "Test",
+        path: "/login",
+        name: "Login",
         component: () =>
-            import("../views/Test")
+            import("../views/Login")
+    }
+    ,
+    {
+        path: "/register",
+        name: "Register",
+        component: () =>
+            import("../views/Register")
     }
 ];
 const router = new VueRouter({

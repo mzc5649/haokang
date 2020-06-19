@@ -2,15 +2,18 @@
     <div style="width: 600px;margin: 0 auto;background-color: white;padding: 5px;border-radius: 5px">
         <Form :model="videoData" label-position="left" :label-width="80" label-colon >
             <FormItem label="标题" >
-                <Input v-model="videoData.title" :disabled="!isUpdate"></Input>
+                <Input v-model="videoData.title" :disabled="!isUpdate" maxlength="20" show-word-limit></Input>
             </FormItem>
             <FormItem label="类别">
                 <Select v-model="videoData.videoClassify.id" style="width:200px" :disabled="!isUpdate">
                     <Option v-for="item in classifyData" :value="item.id" :key="item.id">{{ item.classifyName }}</Option>
                 </Select>
             </FormItem>
+            <FormItem label="简介" >
+                <Input type="textarea"  v-model="videoData.videoDescribe" :disabled="!isUpdate" maxlength="200" show-word-limit></Input>
+            </FormItem>
             <FormItem label="阅读量" >
-                <span v-text="videoData.viewCount"></span>
+                <Input v-model="videoData.viewCount" :disabled="!isUpdate"></Input>
             </FormItem>
             <FormItem label="封面图片" >
                  <span class="image">
@@ -19,6 +22,22 @@
                         <Icon type="ios-eye-outline" @click="handleView()"></Icon>
                     </div>
                 </span>
+                <Upload
+                        action=""
+                        ref="uploadImage"
+                        type="drag"
+                        name="imageFile"
+                        accept="image/jpeg,image/png,image/jpg"
+                        :before-upload="beforeImageUpload"
+                        :show-upload-list="false"
+                        :format="['jpg','jpeg','png']"
+                        style="width: 60px;height: 60px;display: inline-block;margin-left: 10px"
+                        v-if="imageUploadShow"
+                >
+                    <div style="width: 58px;height:58px;line-height: 58px;">
+                        <Icon type="ios-camera" size="20"></Icon>
+                    </div>
+                </Upload>
             </FormItem>
             <FormItem label="创建时间">
                 <span  v-text="videoData.createTime"></span>
@@ -33,11 +52,11 @@
             </FormItem>
             <FormItem>
                 <span v-if="!isUpdate">
-                    <Button type="primary" @click="isUpdate=!isUpdate">修改</Button>
+                    <Button type="primary" @click="uptBtn">修改</Button>
                 </span>
                 <span v-else>
-                     <Button type="success" @click="isUpdate=!isUpdate">提交</Button>
-                     <Button type="warning" style="margin-left: 5px" @click="isUpdate=!isUpdate">取消</Button>
+                     <Button type="success" @click="submitBtn">提交</Button>
+                     <Button type="warning" style="margin-left: 5px" @click="cancelUptBtn">取消</Button>
                 </span>
 
             </FormItem>
@@ -56,7 +75,9 @@
         data() {
             return {
                 imageVisible:false,
+                imageUploadShow:false,
                 isUpdate:false,
+                image:'',
                 videoData: {
                     // eslint-disable-next-line @typescript-eslint/camelcase
                     classify_id: '',
@@ -89,16 +110,97 @@
             that.axios.get('/video/v/' + that.$route.query.id)
                 .then(function (res) {
                     that.videoData = res.data.data;
-                });
+                }).catch(function () {
+                that.$Message.error('获取数据失败');
+            });
             that.axios.get("/video/vc/")
                 .then(function (data) {
                     that.classifyData = data.data.data;
-                });
+                }).catch(function () {
+                that.$Message.error('获取数据失败');
+            });
         },
         methods:{
             //查看封面大图
             handleView(){
                 this.imageVisible=true;
+            },
+            uptBtn(){
+                this.isUpdate=true;
+                this.imageUploadShow=true;
+            },
+            cancelUptBtn(){
+                this.isUpdate=false;
+                this.imageUploadShow=false;
+            },
+            //执行修改提交
+            submitBtn(){
+                // eslint-disable-next-line @typescript-eslint/no-this-alias
+                let that=this;
+                if (that.videoData.title == '') {
+                    that.$Message.warning('标题不能为空');
+                    return;
+                }
+                if (that.videoData.classify_id == '') {
+                    that.$Message.warning('请选择分类');
+                    return;
+                }
+                if (that.videoData.videoDescribe == '') {
+                    that.$Message.warning('简介不能为空');
+                    return;
+                }
+                that.$Modal.confirm({
+                    title: '修改',
+                    content: '<p>确认修改吗</p>',
+                    loading: true,
+                    onOk: () => {
+                        let formData = new FormData();
+                        formData.append('title', that.videoData.title);
+                        formData.append('viewCount', that.videoData.viewCount);
+                        formData.append('member_id', that.videoData.member_id);
+                        formData.append('classifyId', that.videoData.classify_id);
+                        formData.append('desc', that.videoData.videoDescribe);
+                        let config={};
+                        if(that.image!=''){
+                            formData.append('imageFile', that.image);
+                            config={
+                                headers: {"Content-Type": "multipart/form-data"}
+                            }
+                        }
+
+                        that.axios.put('/video/v/'+that.videoData.id, formData,config)
+                            .then(function (res) {
+                                that.$Modal.remove();
+                                if(res.data.code==0){
+                                    that.$Message.success('修改成功');
+                                    that.isUpdate=false;
+                                    that.imageUploadShow=false;
+                                }else {
+                                    that.$Message.error('修改失败');
+                                }
+                            }).catch(function () {
+                            that.$Modal.remove();
+                            that.$Message.error('修改失败');
+                        });
+                    }
+                });
+            },
+            //上传图片前
+            beforeImageUpload(file) {
+                // eslint-disable-next-line @typescript-eslint/no-this-alias
+                let that = this;
+                if (file.size > 5242880) {
+                    that.$Message.error('超出图片大小限制5MB');
+                    return false;
+                }
+                file.src = that.convertSrc(file);
+                that.image=file;
+                that.videoData.viewCoverUrl = file.src;
+                return false;
+            },
+            //转换成src
+            convertSrc(file) {
+                return window.URL.createObjectURL(file);
             },
         }
     }

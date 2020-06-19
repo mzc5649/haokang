@@ -26,7 +26,9 @@
             that.axios.get("/video/vc/")
                 .then(function (data) {
                     that.classifyData = data.data.data;
-                });
+                }).catch(function () {
+                that.$Message.error('获取数据失败');
+            });
         },
         methods:{
             select(name){

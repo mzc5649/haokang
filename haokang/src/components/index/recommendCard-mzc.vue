@@ -1,12 +1,10 @@
 <template>
-
-    <div class="info-box" :style="info.style">
+    <div class="info-box" @click="toVideo" :style="{'background-image':'url('+info.viewCoverUrl+')','background-size':'100% 120px'}">
         <div class="info-box1">
-            <div style="width: 90%;text-align: left;margin:0 auto">
-                <p style="margin-top: 8px;">{{info.title}}</p>
-                <p style="line-height: 23px; color: #F0F8FF; font-size: 10px; margin-top: 10px;">{{info.author}}
-                <p>
-                <p style="font-size: 10px;">{{info.playNum}}</p>
+            <div style="height: 100%;width: 90%;text-align: left;margin:0 auto;display: flex;flex-direction: column;justify-content: space-between">
+                <p style="margin-top: 10px;font-size: 16px">{{info.title}}</p>
+                <p style="color: #e0e0e0; font-size: 12px;">{{info.member.nickname}}
+                <p style="font-size: 12px;color: #e0e0e0">{{info.viewCount}}播放</p>
             </div>
         </div>
     </div>
@@ -15,7 +13,21 @@
 <script>
     export default {
         name: "card",
-        props: ['info']
+        props: ['info'],
+        methods:{
+            toVideo(){
+                let that=this;
+                let obj=that.$router.resolve(
+                    {
+                        path: '/video',
+                        query: {
+                            videoId: that.info.id
+                        }
+                    }
+                )
+                window.open(obj.href,"_blank")
+            }
+        }
     }
 </script>
 
@@ -25,7 +37,7 @@
         border: solid 1px rgba(0, 0, 0, 0);
         overflow: hidden;
         margin-bottom: 10px;
-
+        cursor: pointer;
     }
 
     .info-box1 {
