@@ -11,44 +11,41 @@
                         <span style="color: #000000;font-size: 38px;">用户注册</span>
                         <div>
                             <div class="m2">
-                                <Input v-model="username"
-                                       placeholder="请输入用户名"
-                                       style="width: 440px"
-                                       prefix="ios-contact-outline"
-                                       size="large"
-                                       @on-change="checkRegUsername"
-                                />
-                                <div style="height: 20px;width: 440px;text-align: left;line-height: 20px;font-size: 12px;color: #2db7f5;margin: 6px 0">
-                                    <span v-show="registerTipUnamShow" v-text="registerTipUnam"></span>
-                                </div>
-                                <Input v-model="password"
-                                       type="password"
-                                       placeholder="请输入密码(2-16字符组成，区分大小写)"
-                                       style="width: 440px"
-                                       password
-                                       prefix="ios-lock-outline"
-                                       size="large"
-                                       @on-change="checkRegPwd"
-                                />
-                                <div style="height: 20px;width: 440px;text-align: left;line-height: 20px;font-size: 12px;color: #2db7f5;margin: 6px 0">
-                                    <span v-show="registerTipPwdShow" v-text="registerTipPwd"></span>
-                                </div>
-                                <div style=" width: 440px; display: flex; align-items: center; justify-content: flex-end;">
-                                    <div style="display: flex; justify-content: flex-end; font-size: 10px;">
+                                <Form ref="form" :model="form" :rules="rule" style="width: 100%">
+                                    <FormItem prop="username">
+                                        <Input size="large"
+                                               prefix="ios-contact-outline"
+                                               v-model="form.username"
+                                               placeholder="请输入用户名">
+                                        </Input>
+                                    </FormItem>
+                                    <FormItem prop="password">
+                                        <Input size="large"
+                                               type="password"
+                                               prefix="ios-lock-outline"
+                                               v-model="form.password"
+                                               placeholder="请输入密码(6-16字符组成，区分大小写)"
+                                               password
+                                        >
+                                        </Input>
+                                    </FormItem>
+
+                                    <div style=" width: 440px; display: flex; align-items: center; justify-content: flex-end;">
+                                        <div style="display: flex; justify-content: flex-end; font-size: 10px;">
                                         <span style="">已有<span style="color: #00a0d8;"><router-link
                                                 to="/index">《好康网》</router-link></span>账号？</span>
-                                        <a href="javascript:void(0)" style="text-decoration: none;color: #00a0d8;">
-                                            <router-link to="/login">去登陆</router-link>
-                                        </a>
+                                            <a href="javascript:void(0)" style="text-decoration: none;color: #00a0d8;">
+                                                <router-link to="/login">去登陆</router-link>
+                                            </a>
+                                        </div>
                                     </div>
-                                </div>
-                                <Button v-if="(usernameFlag&&passwordFlag)" type="primary" class="button"
-                                        @click="register" shape="circle">注册
-                                </Button>
-                                <Button v-else type="primary" class="button" @click="register" shape="circle" disabled>
-                                    注册
-                                </Button>
+                                    <FormItem>
+                                        <Button type="primary" class="button" @click="register('form')" shape="circle" :loading="registering">
+                                            注册
+                                        </Button>
+                                    </FormItem>
 
+                                </Form>
                             </div>
                         </div>
                     </div>
@@ -64,118 +61,101 @@
     export default {
         name: "Register",
         data() {
-            return {
-                username: '',
-                usernameFlag: false,
-                password: '',
-                passwordFlag: false,
-                registerTipUnamShow: false,
-                registerTipUnam: '',
-                registerTipPwdShow: false,
-                registerTipPwd: '',
-            }
-        },
-        methods: {
-            register() {
-                let that=this;
-                that.axios.post('/member/m/register',{
-                    username:that.username,
-                    password:that.password
-                }).then(function (res) {
-                   if(res.data.code==0){
-                       that.$Notice.open({
-                           title: '注册通知',
-                           desc: '恭喜你,注册成功'
-                       });
-                       that.usernameFlag=false;
-                       that.passwordFlag=false;
-                       that.username='';
-                       that.password='';
-                   }else{
-                       that.$Notice.open({
-                           title: '注册通知',
-                           desc: '注册失败'
-                       });
-                   }
-                }).catch(function () {
-                    that.$Notice.open({
-                        title: '注册通知',
-                        desc: '注册失败'
-                    });
-                })
-
-            },
-            checkRegPwd() {
-                let that = this;
-                that.passwordFlag = false;
-                if (that.password.length < 6) {
-                    that.registerTipPwd = '密码不能小于6个字符';
-                    that.registerTipPwdShow = true;
-                    that.passwordFlag = false;
-                    return;
-                } else if (that.password.length > 16) {
-                    that.registerTipPwd = '密码不能大于16个字符';
-                    that.registerTipPwdShow = true;
-                    that.passwordFlag = false;
-                    return;
-                } else {
-                    that.registerTipPwdShow = false;
-                    that.passwordFlag = true;
-                }
-
-            },
-            checkRegUsername() {
-                let that = this;
-                that.usernameFlag = false;
-                let str = that.username;
+            const that = this;
+            const validateUsername = (rule, value, callback) => {
+                let regStr = /^[_a-zA-Z0-9-]+$/;
+                let str = value;
                 while (str.lastIndexOf(" ") >= 0) {
                     str = str.replace(" ", "");
                 }
-                if (str == '' || str.length == 0) {
-                    that.registerTipUnam = '请告诉我你的用户名';
-                    that.registerTipUnamShow = true;
-                    that.usernameFlag = false;
-                    return;
-                }
-                if (that.username.indexOf(' ') != -1) {
-                    that.registerTipUnam = '用户名不可包含除-和_以外的特殊字符';
-                    that.registerTipUnamShow = true;
-                    that.usernameFlag = false;
-                    return;
-                }
-                if (that.username.length < 2) {
-                    that.registerTipUnam = '用户名过短';
-                    that.registerTipUnamShow = true;
-                    that.usernameFlag = false;
-                    return;
-                } else if (that.username.length > 16) {
-                    that.registerTipUnam = '用户名过长';
-                    that.registerTipUnamShow = true;
-                    that.usernameFlag = false;
-                    return;
+                if (str === '') {
+                    callback(new Error('请告诉我你的用户名'));
+                } else if (!regStr.test(value)) {
+                    callback(new Error('用户名不可包含除-和_以外的特殊字符'));
+                } else if (value.length < 2) {
+                    callback(new Error('用户名过短'));
+                } else if (value.length > 16) {
+                    callback(new Error('用户名过长'));
                 } else {
-                    that.registerTipUnamShow = false;
-                    that.usernameFlag = false;
+                    that.axios.post('/member/m/repeat', {
+                        username: that.username
+                    }).then(function (res) {
+                        if (res.data.code == 0) {
+                            callback();
+                        } else {
+                            callback(new Error('该用户名已被使用'));
+                        }
+                    }).catch(function () {
+                        callback(new Error('服务器繁忙，请稍后再试'));
+                    })
+
                 }
-                //判断用户名是否可用
-                that.axios.post('/member/m/repeat', {
-                    username: that.username
-                }).then(function (res) {
-                    if (res.data.code == 0) {
-                        that.registerTipUnam = '恭喜你，该用户名可用';
-                        that.usernameFlag = true;
-                        that.registerTipUnamShow = true;
-                    } else {
-                        that.registerTipUnam = '该用户名已被使用';
-                        that.usernameFlag = false;
-                        that.registerTipUnamShow = true;
-                    }
-                }).catch(function () {
-                    that.registerTipUnam = '服务器繁忙，请稍后再试';
-                    that.registerTipUnamShow = true;
-                    that.usernameFlag = false;
-                })
+
+            };
+            const validatePassword = (rule, value, callback) => {
+                if (value.length < 6) {
+                    callback(new Error('密码不能小于6位'));
+                } else if (value.length > 16) {
+                    callback(new Error('密码不能大于16位'));
+                } else {
+                    callback();
+                }
+
+            };
+            return {
+                registering:false,
+                form: {
+                    username: '',
+                    password: ''
+                },
+                rule: {
+                    username: [
+                        {validator: validateUsername, trigger: 'change'}
+
+                    ],
+                    password: [
+                        {validator: validatePassword, trigger: 'change'}
+                    ]
+                }
             }
+        },
+        methods: {
+            register(name) {
+                let that = this;
+                that.$refs[name].validate((valid) => {
+                    if (valid) {
+                        that.registering=true;
+                        that.axios.post('/member/m/register', {
+                            username: that.form.username,
+                            password: that.form.password
+                        }).then(function (res) {
+                            if (res.data.code == 0) {
+                                that.$Notice.open({
+                                    title: '注册通知',
+                                    desc: '恭喜你,注册成功'
+                                });
+                                that.usernameFlag = false;
+                                that.passwordFlag = false;
+                                that.username = '';
+                                that.password = '';
+                            } else {
+                                that.$Notice.open({
+                                    title: '注册通知',
+                                    desc: '注册失败'
+                                });
+                            }
+                        }).catch(function () {
+                            that.$Notice.open({
+                                title: '注册通知',
+                                desc: '注册失败'
+                            });
+                        })
+                    }
+                })
+
+            },
+
+
         }
     }
 </script>
@@ -213,11 +193,6 @@
         width: 100%;
         height: 86px;
         margin-bottom: 20px;
-    }
-
-    .m1 {
-        width: 980px;
-        text-align: center;
     }
 
     .m2 {
