@@ -44,7 +44,6 @@
                                             注册
                                         </Button>
                                     </FormItem>
-
                                 </Form>
                             </div>
                         </div>
@@ -78,7 +77,7 @@
                     callback(new Error('用户名过长'));
                 } else {
                     that.axios.post('/member/m/repeat', {
-                        username: that.username
+                        username: value
                     }).then(function (res) {
                         if (res.data.code == 0) {
                             callback();

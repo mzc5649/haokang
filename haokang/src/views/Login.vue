@@ -11,13 +11,12 @@
                         <span style="color: #000000;font-size: 38px;">用户登录</span>
                         <div>
                             <div class="m2">
-                                <Form ref="form" :model="form" :rules="rule" style="width: 100%">
+                                <Form  ref="form" :model="loginForm" :rules="rule">
                                     <FormItem prop="username">
                                         <Input size="large"
                                                prefix="ios-contact-outline"
-                                               v-model="form.username"
+                                               v-model="loginForm.username"
                                                placeholder="请输入用户名"
-                                               maxlength="16"
                                         >
                                         </Input>
                                     </FormItem>
@@ -25,7 +24,7 @@
                                         <Input size="large"
                                                type="password"
                                                prefix="ios-lock-outline"
-                                               v-model="form.password"
+                                               v-model="loginForm.password"
                                                placeholder="请输入密码"
                                                password
                                         >
@@ -36,7 +35,6 @@
                                         <Checkbox v-model="remberMe" style="font-size: 12px">记住我</Checkbox>
                                         <span style="font-size: 12px;color: #BBBBBB">不是自己的电脑上不要勾选此项</span>
                                     </span>
-
                                         <div style="display: flex; justify-content: flex-end; font-size: 10px;">
                                             <span style="">还没有<span style="color: #00a0d8;"><router-link to="/index">《好康网》</router-link></span>账号？</span>
                                             <a href="javascript:void(0)" style="text-decoration: none;color: #00a0d8;">
@@ -45,8 +43,7 @@
                                         </div>
                                     </div>
                                     <FormItem>
-                                        <Button type="primary" class="button" @click="login('form')" shape="circle"
-                                                :loading="logining">
+                                        <Button type="primary" class="button" @click="login('form')" shape="circle" :loading="logining">
                                             登录
                                         </Button>
                                     </FormItem>
@@ -68,43 +65,52 @@
         name: "Login",
         data() {
             const validateUsername = (rule, value, callback) => {
-                if (value === '') {
+                let str = value;
+                while (str.lastIndexOf(" ") >= 0) {
+                    str = str.replace(" ","");
+                }
+                if(str===''){
                     callback(new Error('请告诉我你的用户名'));
-                } else {
+                }else if(value.indexOf(' ')!=-1){
+                    callback(new Error('用户名不能含有空格'));
+                }else {
                     callback();
                 }
-            };
+            }
             const validatePassword = (rule, value, callback) => {
-                if (value === '') {
+                if (value ==='') {
                     callback(new Error('喵，你没输入密码么？'));
-                } else {
+                }else {
                     callback();
                 }
-            };
+            }
             return {
                 logining: false,
-                form: {
+                loginForm:{
                     username: '',
                     password: ''
                 },
                 remberMe: true,
                 rule: {
                     username: [
-                        {validator: validateUsername, trigger: 'submit'}
+                        {validator: validateUsername, trigger: 'change'}
                     ],
                     password: [
-                        {validator: validatePassword, trigger: 'submit'}
+                        {validator: validatePassword, trigger: 'change'}
                     ]
                 }
             }
         },
         created() {
-            let that = this;
+        },
+        mounted() {
+             let that = this;
             let obj = localStorage.getItem("userLoginInfo");
+            console.log(obj)
             if (obj != null) {
                 let userLoginInfo = JSON.parse(obj)
-                that.form.username = userLoginInfo.username;
-                that.form.password = userLoginInfo.password;
+                that.loginForm.username = userLoginInfo.username;
+                that.loginForm.password = userLoginInfo.password;
             }
         },
         methods: {
@@ -115,25 +121,27 @@
                         that.logining=true;
                         //验证
                         that.axios.post('/member/m/login', {
-                            username: that.form.username,
-                            password: that.form.password
+                            username: that.loginForm.username,
+                            password: that.loginForm.password
                         }).then(function (res) {
+                            that.logining=false;
                             if (res.data.code == 0) {
                                 if (that.remberMe) {
-                                    let data = {username: that.username, password: that.password};
+                                    let data = {username: that.loginForm.username, password: that.loginForm.password};
                                     localStorage.setItem("userLoginInfo", JSON.stringify(data));
                                 } else {
                                     localStorage.removeItem("userLoginInfo");
                                 }
                                 that.$router.push('/index');
+                            }else{
+                                this.$Message.error("登录失败，用户名或密码错误");
                             }
                         }).catch(function () {
-
+                            that.$Message.error("系统繁忙");
                         })
                     }
                 });
-
-            },
+            }
         }
     }
 </script>

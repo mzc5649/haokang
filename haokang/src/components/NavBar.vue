@@ -6,15 +6,18 @@
                     <div class="container-fluid">
                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1"
                              style="margin: 0; display: flex;justify-content: space-between;">
-                            <img src="/img/bar/logo-white.png"
-                                 style="width: 200px; margin-left: 20px; margin-top: 10px;"/>
+                            <router-link to="/index">
+                                <img src="/img/bar/logo-white.png"
+                                     style="width: 200px; margin-left: 20px; margin-top: 10px;"/>
+                            </router-link>
                             <ul class="nav-a"
                                 v-show="!isLogin"
                                 v-cloak
-                                style="display: flex;list-style: none; padding: 15px;margin: 0;right: 0;align-items: center">
-                                <li>
-                                    <Avatar icon="ios-person" size="large" style="cursor: pointer"/>
-                                </li>
+                                style="display: flex;list-style: none; padding: 15px;margin: 0;right: 0;align-items: center;width: 180px">
+                                        <li style="cursor: pointer;height: 40px;width: 40px;min-width: 40px;min-height: 40px">
+                                        <Avatar icon="ios-person" size="large"
+                                                style="cursor: pointer"/>
+                                        </li>
                                 <li>
                                     <span style="color: white; float: left;">
                                         <router-link to="/login" target="_blank">
@@ -33,11 +36,16 @@
                             <ul class="nav-a"
                                 v-cloak
                                 v-show="isLogin"
-                                style="display: flex;list-style: none; padding: 15px;margin: 0;right: 0;align-items: center">
-                                <li @click="toHome" style="cursor: pointer">
-                                    <Avatar :src="memberInfo.icon" icon="ios-person" size="large"
-                                             />
+                                style="display: flex;list-style: none; padding: 15px;margin: 0;right: 0;align-items: center;width: 180px;justify-content: space-between">
+                                <li  style=";margin-right: 10px">
+                                    <Poptip  trigger="hover" placement="bottom" @on-popper-show="onPopperShow" @on-popper-hide="onPopperHide">
+                                        <Avatar style="cursor: pointer"  :src="memberInfo.icon" icon="ios-person" size="large" />
+                                        <template slot="content">
+                                            <NavBarCard :member-info="memberInfo"></NavBarCard>
+                                        </template>
+                                    </Poptip>
                                 </li>
+                                <Button type="info" size="large" long>投稿</Button>
                             </ul>
                         </div>
                     </div>
@@ -72,14 +80,18 @@
 </template>
 
 <script>
+    import NavBarCard from "./NavBarCard";
+
     export default {
         name: "NavBar",
-        props:{
-            isLogin:Boolean,
-            memberInfo:Object
+        components: {NavBarCard},
+        props: {
+            isLogin: Boolean,
+            memberInfo: Object
         },
         data() {
             return {
+
             }
         },
         created() {
@@ -90,6 +102,12 @@
                 let that = this;
                 let obj = that.$router.resolve("/home");
                 window.open(obj.href, "_blank");
+            },
+            onPopperShow(){
+
+            },
+            onPopperHide(){
+
             }
         }
     }
@@ -120,7 +138,6 @@
         text-align: center;
         background: linear-gradient(60deg, rgba(84, 58, 183, 1) 0%, rgba(0, 172, 193, 1) 100%);
         color: white;
-        overflow: hidden;
     }
 
     .logo {
@@ -207,7 +224,6 @@
 
     .nav-body {
         width: 100%;
-        height: 180px;
     }
 
     .nav-a {
@@ -250,5 +266,18 @@
 
         display: none !important;
 
+    }
+</style>
+<style>
+    .ivu-poptip-arrow {
+        display: none;
+    }
+
+    .ivu-poptip-body {
+        padding: 0;
+    }
+
+    .ivu-poptip-body-content {
+        overflow: hidden;
     }
 </style>

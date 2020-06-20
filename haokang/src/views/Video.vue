@@ -1,7 +1,7 @@
 <template>
     <div class="index">
         <Layout id="layout">
-                <NavBar></NavBar>
+                <NavBar :member-info="memberInfo" :is-login="isLogin"></NavBar>
             <Content id="content">
                 <Row style="display: flex;justify-content: space-between">
                     <Col span="15">
@@ -166,6 +166,8 @@
                         fullscreenToggle: true  //全屏按钮
                     }
                 },
+                memberInfo:{},
+                isLogin:false
             }
         },
         components: {NavBar, CommentZzj, SendDMLzr, FooterZzj, videoPlayer, VBarrage},
@@ -321,6 +323,25 @@
         },
         created() {
             let that = this;
+            //是否登录
+            that.axios.post("/member/m/loginOrNot")
+                .then(function (res) {
+                    if (res.data.code == 0) {
+                        that.$store.state.m_id = res.data.data;
+                        that.isLogin = true;
+                        that.showLogin = false;
+                        that.axios.get("/member/m/" + that.$store.state.m_id)
+                            .then(function (res) {
+                                if (res.data.code == 0) {
+                                    that.memberInfo = res.data.data;
+                                }
+
+                            })
+                    } else {
+                        that.isLogin = false;
+                        that.showLogin = true;
+                    }
+                })
             that.id = that.$route.query.videoId;
             //获取视频信息
             that.axios.get('/video/v/' + that.id,)

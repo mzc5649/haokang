@@ -8,7 +8,8 @@ export default new Vuex.Store({
     state: {
         danMuList: [],//弹幕列表
         m_id:sessionStorage.getItem("m_id"), //当前登录用户id
-        memberInfo:{}
+        memberInfo:{},
+        memberIconSrc:''
     },
     mutations: {
         addToDanMuList(state, info) {

@@ -22,7 +22,7 @@ const routes = [
         name: "Home",
         children:[
             {
-                path: "homeIndex",
+                path: "/",
                 name:"homeIndex",
                 component:() =>
                     import("../components/home/homeIndex")
@@ -32,6 +32,12 @@ const routes = [
                 name:"homeMyInfo",
                 component:() =>
                     import("../components/home/homeMyInfo")
+            },
+            {
+                path: "homeMyHead",
+                name:"homeMyHead",
+                component:() =>
+                    import("../components/home/homeMyHead")
             },
 
         ],
