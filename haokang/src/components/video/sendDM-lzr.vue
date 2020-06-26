@@ -1,22 +1,25 @@
 <template>
-
-        <div style="display: flex; align-items: center;margin-left: 50%;transform: translateX(-50%);height: 36px">
-            <input class="switch-btn switch-btn-animbg" @click="switchClick" type="checkbox" checked>
-            <transition name="custom-classes-transition"
-                        enter-active-class="animate__animated animate__zoomIn"
-                        leave-active-class="animate__animated animate__zoomOut"
-            >
-                <div v-show="isShow" class="in_d" style="display: flex;align-items: center;">
+    <div style="max-width: 410px;min-width: 410px;;display: flex;align-items: center;height: 36px;left: 50%;transform: translateX(-50%);position: relative">
+        <input class="switch-btn switch-btn-animbg" @click="switchClick" type="checkbox" checked>
+        <transition name="custom-classes-transition"
+                    enter-active-class="animate__animated animate__zoomIn"
+                    leave-active-class="animate__animated animate__zoomOut"
+        >
+            <div v-show="isShow" class="in_d" style="display: flex;align-items: center;">
+                <Form style="position: relative;display: flex" :disabled="!isLogin">
                     <Select v-model="direction" style="width:65px">
                         <Option value="default">默认</Option>
                         <Option value="top">顶部</Option>
                     </Select>
-                    <Input ref="dm"   v-model="danMuContent" placeholder="发个友善的弹幕见证当下" style="width: 180px"/>
+                    <Input ref="dm" v-model="danMuContent" placeholder="发个友善的弹幕见证当下" style="width: 180px"/>
                     <ColorPicker v-model="color" recommend />
-                    <Button type="primary" @click="sendDanMu">发送</Button>
-                </div>
-            </transition>
-        </div>
+                    <Button type="primary" @click="sendDanMu" style="width: 60px">发送</Button>
+                    <span v-show="!isLogin" class="dmShadow">请先<router-link to="/login" target="_blank">登录</router-link>或<router-link
+                            to="/register" target="_blank">注册</router-link></span>
+                </Form>
+            </div>
+        </transition>
+    </div>
 
 </template>
 
@@ -24,14 +27,16 @@
 
     export default {
         name: "sendDM-lzr",
-        props: {},
+        props: {
+            isLogin:Boolean
+        },
         data() {
             return {
-                color:'#FFFFFF',
+                color: '#FFFFFF',
                 isShow: true,
                 danMuContent: '',
                 danMuIsShow: true,
-                direction:'default'
+                direction: 'default'
             }
         },
         methods: {
@@ -41,8 +46,8 @@
                 this.$emit('switchDmShow', this.danMuIsShow)
             },
             sendDanMu() {
-                this.$emit('sendDanMu', this.danMuContent,this.color,this.direction);
-                this.danMuContent='';
+                this.$emit('sendDanMu', this.danMuContent, this.color, this.direction);
+                this.danMuContent = '';
             }
         }
     }
@@ -122,5 +127,14 @@
         font: 14px/30px "microsoft yahei";
         color: rgb(153, 153, 153);
         background-color: rgb(224, 224, 224);
+    }
+
+    .dmShadow {
+        position: absolute;
+        top: 50%;
+        left: 20%;
+        transform: translateY(-50%);
+        font-size: 18px;
+        color: gray;
     }
 </style>

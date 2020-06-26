@@ -106,7 +106,6 @@
         mounted() {
              let that = this;
             let obj = localStorage.getItem("userLoginInfo");
-            console.log(obj)
             if (obj != null) {
                 let userLoginInfo = JSON.parse(obj)
                 that.loginForm.username = userLoginInfo.username;
@@ -134,10 +133,11 @@
                                 }
                                 that.$router.push('/index');
                             }else{
-                                this.$Message.error("登录失败，用户名或密码错误");
+                                that.$Message.error("登录失败，用户名或密码错误");
                             }
                         }).catch(function () {
                             that.$Message.error("系统繁忙");
+                            that.logining=false;
                         })
                     }
                 });

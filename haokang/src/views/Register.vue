@@ -137,13 +137,16 @@
                                 that.passwordFlag = false;
                                 that.username = '';
                                 that.password = '';
+                                that.registering=false;
                             } else {
+                                that.registering=false;
                                 that.$Notice.open({
                                     title: '注册通知',
                                     desc: '注册失败'
                                 });
                             }
                         }).catch(function () {
+                            that.registering=false;
                             that.$Notice.open({
                                 title: '注册通知',
                                 desc: '注册失败'

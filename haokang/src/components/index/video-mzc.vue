@@ -1,23 +1,23 @@
 <template>
-    <div class="video">
-        <Row :gutter="10" style="border: 1px red solid">
-            <Col span="16">
-                <div style="height: 30px;display: flex;justify-content: flex-start;font-size: 18px">
-                    <slot>视频</slot>
+    <div  >
+        <Row :gutter="10">
+            <Col span="16" >
+                <div style="height: 30px;display: flex;justify-content: flex-start;font-size: 18px;padding-left: 16px;align-items: center">
+                    <slot><Icon type="logo-youtube" size="30" style="margin-right: 10px"/>视频</slot>
                 </div>
-                <Row :gutter="10">
+                <Row :gutter="10" style="padding: 8px 16px;">
                     <template v-for="(item,index) in videoData">
                         <Col span="6" :key="index">
-                            <VideoCard :key="item.id" :videoData="item">{{item}}</VideoCard>
+                            <VideoCard  :key="item.id" :videoData="item">{{item}}</VideoCard>
                         </Col>
                     </template>
                 </Row>
             </Col>
             <Col span="8">
-                <div style="height: 30px;display: flex;justify-content: flex-start;font-size: 18px">
-                    排行榜
+                <div style="height: 30px;display: flex;justify-content: flex-start;font-size: 18px;align-items: center">
+                    <Icon type="md-podium" size="30" style="margin-right: 10px" />排行榜
                 </div>
-                <RankMzc :rankData="rankData"></RankMzc>
+                <RankMzc :rankData="rankData" style="overflow: hidden"></RankMzc>
             </Col>
         </Row>
 

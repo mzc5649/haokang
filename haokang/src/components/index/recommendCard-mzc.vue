@@ -19,7 +19,7 @@
                 let that=this;
                 let obj=that.$router.resolve(
                     {
-                        path: '/video',
+                        path: '/v',
                         query: {
                             videoId: that.info.id
                         }

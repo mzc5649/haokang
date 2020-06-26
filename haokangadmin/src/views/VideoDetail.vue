@@ -2,7 +2,7 @@
     <div style="width: 600px;margin: 0 auto;background-color: white;padding: 5px;border-radius: 5px">
         <Form :model="videoData" label-position="left" :label-width="80" label-colon >
             <FormItem label="标题" >
-                <Input v-model="videoData.title" :disabled="!isUpdate" maxlength="20" show-word-limit></Input>
+                <Input v-model="videoData.title" :readonly="!isUpdate" maxlength="20" show-word-limit></Input>
             </FormItem>
             <FormItem label="类别">
                 <Select v-model="videoData.videoClassify.id" style="width:200px" :disabled="!isUpdate">
@@ -10,10 +10,10 @@
                 </Select>
             </FormItem>
             <FormItem label="简介" >
-                <Input type="textarea"  v-model="videoData.videoDescribe" :disabled="!isUpdate" maxlength="200" show-word-limit></Input>
+                <Input type="textarea"  v-model="videoData.videoDescribe" :readonly="!isUpdate" maxlength="200" show-word-limit></Input>
             </FormItem>
             <FormItem label="阅读量" >
-                <Input v-model="videoData.viewCount" :disabled="!isUpdate"></Input>
+                <Input v-model="videoData.viewCount" :readonly="!isUpdate"></Input>
             </FormItem>
             <FormItem label="封面图片" >
                  <span class="image">
@@ -48,7 +48,7 @@
             <FormItem label="视频">
                 <video :src="videoData.videoContent.videoUrl" :poster="videoData.viewCoverUrl"
                        width="480px" height="270px"
-                       controls style="object-fit:fill;"></video>
+                       controls style=""></video>
             </FormItem>
             <FormItem>
                 <span v-if="!isUpdate">
@@ -58,7 +58,6 @@
                      <Button type="success" @click="submitBtn">提交</Button>
                      <Button type="warning" style="margin-left: 5px" @click="cancelUptBtn">取消</Button>
                 </span>
-
             </FormItem>
         </Form>
         <Modal title="查看图片" v-model="imageVisible">
@@ -107,13 +106,13 @@
         created() {
             // eslint-disable-next-line @typescript-eslint/no-this-alias
             const that = this;
-            that.axios.get('/video/v/' + that.$route.query.id)
+            that.axios.get('/admin/v/' + that.$route.query.id)
                 .then(function (res) {
                     that.videoData = res.data.data;
                 }).catch(function () {
                 that.$Message.error('获取数据失败');
             });
-            that.axios.get("/video/vc/")
+            that.axios.get("/admin/vc/")
                 .then(function (data) {
                     that.classifyData = data.data.data;
                 }).catch(function () {
@@ -126,10 +125,12 @@
                 this.imageVisible=true;
             },
             uptBtn(){
+                this.$Message.info("开启修改");
                 this.isUpdate=true;
                 this.imageUploadShow=true;
             },
             cancelUptBtn(){
+                this.$Message.info("关闭修改");
                 this.isUpdate=false;
                 this.imageUploadShow=false;
             },
@@ -158,7 +159,7 @@
                         formData.append('title', that.videoData.title);
                         formData.append('viewCount', that.videoData.viewCount);
                         formData.append('member_id', that.videoData.member_id);
-                        formData.append('classifyId', that.videoData.classify_id);
+                        formData.append('classifyId', that.videoData.videoClassify.id);
                         formData.append('desc', that.videoData.videoDescribe);
                         let config={};
                         if(that.image!=''){
@@ -167,8 +168,7 @@
                                 headers: {"Content-Type": "multipart/form-data"}
                             }
                         }
-
-                        that.axios.put('/video/v/'+that.videoData.id, formData,config)
+                        that.axios.put('/admin/v/'+that.videoData.id, formData,config)
                             .then(function (res) {
                                 that.$Modal.remove();
                                 if(res.data.code==0){
@@ -202,6 +202,7 @@
             convertSrc(file) {
                 return window.URL.createObjectURL(file);
             },
+
         }
     }
 </script>

@@ -7,7 +7,6 @@
                 </template>
                 <MenuItem name="Member" to="/member">所有会员</MenuItem>
                 <MenuItem name="1-2">新增会员</MenuItem>
-                <MenuItem name="1-3">举报管理</MenuItem>
             </Submenu>
             <Submenu name="2">
                 <template slot="title">
@@ -15,9 +14,15 @@
                     视频管理
                 </template>
                 <MenuItem name="Video" to="/video">所有视频</MenuItem>
-                <MenuItem name="VideoAdd" to="/videoAdd">添加视频</MenuItem>
             </Submenu>
             <Submenu name="3">
+                <template slot="title">
+                    <Icon type="ios-people" />
+                    文章管理
+                </template>
+                <MenuItem name="Article" to="/article">所有文章</MenuItem>
+            </Submenu>
+            <Submenu name="4">
                 <template slot="title">
                     <Icon type="ios-stats" />
                     统计分析

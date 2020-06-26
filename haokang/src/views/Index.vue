@@ -1,9 +1,9 @@
 <template>
-    <div class="index">
+    <div class="index" style="position: relative">
         <Layout>
-            <NavBar :member-info="memberInfo" :is-login="isLogin"></NavBar>
+            <NavBar :is-login="isLogin"></NavBar>
             <Content id="content">
-                <ClassifyMzc :data="classifyData"></ClassifyMzc>
+                <ClassifyMzc :data="classifyData" :check-id='checkId'></ClassifyMzc>
                 <RecommendMzc :video-data="videoHotData"></RecommendMzc>
                 <!--根据种类 显示-->
                 <template v-for="(item,index) in classifyData">
@@ -17,7 +17,7 @@
                         </template>
                         <!--文章-->
                         <template v-slot:article>
-                            <ArticleMzc></ArticleMzc>
+                            <ArticleMzc :classify-id="item.id"></ArticleMzc>
                         </template>
                     </SortMzc>
                 </template>
@@ -26,7 +26,7 @@
                 <FooterZzj></FooterZzj>
             </Footer>
         </Layout>
-        <BackTop :height="100" :bottom="150">
+        <BackTop :height="100" :bottom="10">
             <div class="top">返回顶端</div>
         </BackTop>
     </div>
@@ -46,6 +46,7 @@
         components: {NavBar, SortMzc, FooterZzj, VideoMzc, RecommendMzc, ClassifyMzc, ArticleMzc},
         data() {
             return {
+                checkId:'0',
                 classifyData: [],
                 value1: 0,
                 videoHotData: [],
@@ -62,19 +63,18 @@
                 .then(function (res) {
                     if (res.data.code == 0) {
                         that.$store.state.m_id = res.data.data;
+                        window.sessionStorage.setItem("m_id",res.data.data),
                         that.isLogin = true;
-                        that.showLogin = false;
+                        //查询用户
                         that.axios.get("/member/m/" + that.$store.state.m_id)
                             .then(function (res) {
                                 if (res.data.code == 0) {
-                                    console.log(res.data.data.birthday)
                                     that.$store.state.memberInfo = res.data.data;
                                     that.$store.state.memberIconSrc =res.data.data.icon;
                                 }
                             })
                     } else {
                         that.isLogin = false;
-                        that.showLogin = true;
                     }
                 })
             //视频分类
@@ -106,12 +106,16 @@
                 return that.$store.state.memberInfo;
             }
         }
-
     }
 
 </script>
 <style>
-
+    .ivu-list-item-meta-title{
+        height: 24px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
 </style>
 <style scoped>
     #header {
@@ -123,7 +127,7 @@
     }
 
     #content {
-        padding: 0 100px;
+        padding: 0 160px;
         background-color: white;
     }
 
@@ -134,4 +138,5 @@
         text-align: center;
         border-radius: 2px;
     }
+
 </style>

@@ -23,7 +23,7 @@
         created() {
             // eslint-disable-next-line @typescript-eslint/no-this-alias
             const that = this;
-            that.axios.get("/video/vc/")
+            that.axios.get("/admin/vc/")
                 .then(function (data) {
                     that.classifyData = data.data.data;
                 }).catch(function () {

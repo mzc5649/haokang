@@ -10,7 +10,6 @@
                      更换头像
                      </div>
                 </router-link>
-
             </span>
             <div style="margin-left: 20px;width:100%;height:64px;text-align: left">
                 <div style="height: 32px;line-height: 32px;display: flex;justify-content: space-between">
@@ -19,9 +18,10 @@
                                 <Icon v-if="member.gender==null" type="md-transgender"/>
                                 <Icon v-else-if="member.gender=='男'" type="md-male"/>
                                 <Icon v-else type="md-female"/>
+                                {{age}}
                             </span>
                     <span>
-                                <Button shape="circle" icon="md-create" size="small"></Button>
+                                <Button @click="toMyInfo" shape="circle" icon="md-create" size="small"></Button>
                             </span>
                 </div>
                 <div v-text="member.sign"></div>
@@ -35,14 +35,31 @@
         name: "homeIndex",
         data() {
             return {
-                memberInfo: this.$store.state.memberInfo
             }
 
+        },
+        methods: {
+            toMyInfo() {
+                let that = this;
+                that.$router.push('/home/homeMyInfo')
+            }
         },
         computed: {
             member: function () {
                 let that = this;
                 return that.$store.state.memberInfo;
+            },
+            age: function () {
+                let that = this;
+                var date = new Date();
+                var birthday = that.member.birthday;
+                var startDate = new Date(birthday);
+                var newDate = date.getTime() - startDate.getTime();
+                var age = Math.floor(newDate / 1000 / 60 / 60 / 24 / 365);
+                if (isNaN(age)) {
+                    age = "";
+                }
+                return age;
             }
         }
     }

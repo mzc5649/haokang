@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-<!--    <router-link target="_blank" :to="{path:'/home',query:{id:1}}">home</router-link>-->
     <router-view></router-view>
   </div>
 </template>

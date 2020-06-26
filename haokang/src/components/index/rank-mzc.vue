@@ -1,51 +1,84 @@
 <template>
-    <div style="height: 400px;" data-aos="fade-up">
+    <div data-aos="fade-up" style="height: 400px;border: 1px solid #dcdee2;border-radius: 6px;padding: 8px 16px;">
         <template v-for="(item,index) in rankData">
             <div v-if="(index+1)==1" :key="index+1">
                 <div :key="index+1" style="display: flex;margin-bottom: 18px" data-aos="fade-left">
                     <div class="rank-first">
                         <span class="number on">{{index+1}}</span>
-                        <div class="preview">
-                            <img :src="item.viewCoverUrl" style="width:112px;cursor: pointer;height: 100%"
-                                 @click="toVideo(item.id)"/>
-                            <div class="txt1">
-                                <a href="javascript:void(0)" @click="toVideo(item.id)">
+                        <Poptip trigger="hover" placement="top-start"
+                                @on-popper-show="onPopperShow(item.member_id)" :transfer="true" offset="20">
+                            <div class="preview">
+                                <img :src="item.viewCoverUrl" style="width:112px;cursor: pointer;height: 58px"
+                                     @click="toVideo(item.id)"/>
+                                <div class="txt1">
+                                    <!--弹窗-->
                                     <p :title="item.title">
-                                        <Poptip trigger="hover" placement="top" @on-popper-show="onPopperShow">
+                                        <a @click="toVideo(item.id)" href="javascript:void(0)">
                                             {{item.title}}
-                                            <template slot="content">
-                                                123
-                                            </template>
-                                        </Poptip>
+                                        </a>
                                     </p>
-                                </a>
-                                <span class="zonghe">
+                                    <span class="zonghe">
                                 播放量:{{item.viewCount}}
                                 </span>
+                                </div>
                             </div>
-                        </div>
+                            <template slot="content">
+                                <VideoCardRank :video-info="item"></VideoCardRank>
+                            </template>
+                        </Poptip>
                     </div>
                 </div>
             </div>
             <div v-else-if="(index+1)<4" :key="index+1">
-                <div :key="index+1" style="height: 20px;margin-bottom:18px;display: flex;align-items: center"
+                <div :key="index+1"
+                     style="height: 20px;margin-bottom:18px;display: flex;align-items: center;position:relative;z-index: 2"
                      data-aos="fade-left">
                     <div class="number on">{{index+1}}</div>
-                    <div class="otherTitle" @click="toVideo(item.id)">{{item.title}}</div>
+                    <div class="otherTitle" @click="toVideo(item.id)">
+                        <!--弹窗-->
+                        <Poptip trigger="hover" placement="top-start" @on-popper-show="onPopperShow(item.member_id)"
+                                :transfer="true">
+
+                            {{item.title}}
+
+                            <template slot="content">
+                                <VideoCardRank :video-info="item"></VideoCardRank>
+                            </template>
+                        </Poptip>
+                    </div>
                 </div>
             </div>
             <div v-else-if="(index+1)<10" :key="index+1">
-                <div :key="index+1" style="height: 20px;margin-bottom:18px;display: flex;align-items: center"
+                <div :key="index+1"
+                     style="height: 20px;margin-bottom:18px;display: flex;align-items: center;position:relative;z-index: 2"
                      data-aos="fade-left">
                     <div class="number">{{index+1}}</div>
-                    <div class="otherTitle" @click="toVideo(item.id)">{{item.title}}</div>
+                    <div class="otherTitle" @click="toVideo(item.id)">
+                        <!--弹窗-->
+                        <Poptip trigger="hover" placement="top-start" @on-popper-show="onPopperShow(item.member_id)"
+                                :transfer="true">
+                            {{item.title}}
+                            <template slot="content">
+                                <VideoCardRank :video-info="item"></VideoCardRank>
+                            </template>
+                        </Poptip>
+                    </div>
                 </div>
             </div>
             <div v-else :key="index+1">
-                <div :key="index+1" style="height: 20px;display: flex;align-items: center"
+                <div :key="index+1" style="height: 20px;display: flex;align-items: center;position:relative;z-index: 2"
                      data-aos="fade-left">
                     <div class="number">{{index+1}}</div>
-                    <div class="otherTitle" @click="toVideo(item.id)">{{item.title}}</div>
+                    <div class="otherTitle" @click="toVideo(item.id)">
+                        <!--弹窗-->
+                        <Poptip trigger="hover" placement="top-start" @on-popper-show="onPopperShow(item.member_id) "
+                                :transfer="true">
+                            {{item.title}}
+                            <template slot="content">
+                                <VideoCardRank :video-info="item"></VideoCardRank>
+                            </template>
+                        </Poptip>
+                    </div>
                 </div>
             </div>
 
@@ -55,25 +88,28 @@
 </template>
 
 <script>
+    import VideoCardRank from "../rank/videoCardRank";
+
     export default {
         name: "rank-mzc",
+        components: {VideoCardRank},
         props: ['rankData'],
         methods: {
             //跳转到对应视频
             toVideo(id) {
                 let that = this;
-                let obj=that.$router.resolve(
+                let obj = that.$router.resolve(
                     {
-                        path: '/video',
+                        path: '/v',
                         query: {
                             videoId: id
                         }
                     }
                 )
-                window.open(obj.href,"_blank")
+                window.open(obj.href, "_blank")
             },
-            onPopperShow() {
-
+            onPopperShow(id) {
+                console.log(id)
             }
         }
     }
@@ -88,9 +124,10 @@
         overflow: hidden;
         text-overflow: ellipsis;
         cursor: pointer;
-        line-height: 30px;
-        height: 30px;
+        line-height: 20px;
+        height: 20px;
         white-space: nowrap;
+
     }
 
     .otherTitle:hover {
@@ -119,6 +156,7 @@
         color: #fff;
         background-color: #00a1d6;
         width: 18px;
+        min-width: 18px;
         height: 18px;
         text-align: center;
         border-radius: 2px;
@@ -132,6 +170,7 @@
         flex-direction: row;
         margin-left: 20px;
         align-items: center;
+        overflow: hidden;
     }
 
     .txt1 {
@@ -256,11 +295,20 @@
         background-color: #FFFFFF;
         width: 18px;
         height: 18px;
+        line-height: 18px;
         text-align: center;
         border-radius: 2px;
         display: inline-block;
         line-height: 18px;
         font-size: 14PX;
+    }
+
+    .ivu-poptip {
+        width: 100%;
+    }
+
+    .ivu-poptip-rel {
+        width: 100%;
     }
 </style>
 <style>
@@ -275,4 +323,9 @@
     .ivu-poptip-body-content {
         overflow: hidden;
     }
+
+    .ivu-poptip-rel {
+        width: 100%;
+    }
+
 </style>

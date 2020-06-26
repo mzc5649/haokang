@@ -14,10 +14,10 @@
                                 v-show="!isLogin"
                                 v-cloak
                                 style="display: flex;list-style: none; padding: 15px;margin: 0;right: 0;align-items: center;width: 180px">
-                                        <li style="cursor: pointer;height: 40px;width: 40px;min-width: 40px;min-height: 40px">
-                                        <Avatar icon="ios-person" size="large"
-                                                style="cursor: pointer"/>
-                                        </li>
+                                <li style="cursor: pointer;height: 40px;width: 40px;min-width: 40px;min-height: 40px">
+                                    <Avatar icon="ios-person" size="large"
+                                            style="cursor: pointer"/>
+                                </li>
                                 <li>
                                     <span style="color: white; float: left;">
                                         <router-link to="/login" target="_blank">
@@ -37,15 +37,19 @@
                                 v-cloak
                                 v-show="isLogin"
                                 style="display: flex;list-style: none; padding: 15px;margin: 0;right: 0;align-items: center;width: 180px;justify-content: space-between">
-                                <li  style=";margin-right: 10px">
-                                    <Poptip  trigger="hover" placement="bottom" @on-popper-show="onPopperShow" @on-popper-hide="onPopperHide">
-                                        <Avatar style="cursor: pointer"  :src="memberInfo.icon" icon="ios-person" size="large" />
+                                <li style="margin-right: 10px">
+                                    <Poptip trigger="hover" placement="bottom" @on-popper-show="onPopperShow"
+                                            @on-popper-hide="onPopperHide">
+                                        <Badge :count="dotCount" dot>
+                                            <Avatar style="cursor: pointer" :src="memberInfo.icon" icon="ios-person"
+                                                    size="large"/>
+                                        </Badge>
                                         <template slot="content">
                                             <NavBarCard :member-info="memberInfo"></NavBarCard>
                                         </template>
                                     </Poptip>
                                 </li>
-                                <Button type="info" size="large" long>投稿</Button>
+                                <Button type="info" size="large" long @click="toCreate">投稿</Button>
                             </ul>
                         </div>
                     </div>
@@ -87,15 +91,36 @@
         components: {NavBarCard},
         props: {
             isLogin: Boolean,
-            memberInfo: Object
         },
-        data() {
-            return {
+        mounted() {
+            let that=this;
+            //是否登录
+            that.axios.post("/member/m/loginOrNot")
+                .then(function (res) {
+                    if (res.data.code == 0) {
+                        let id=res.data.data;
+                        if(id!=null){
+                            that.axios.get("/video/m/sign/"+id)
+                                .then(function (res) {
+                                    console.log(res.data)
+                                    if (res.data.code == 0) {
+                                        that.$store.state.dotCount=1;
+                                    }else{
+                                        that.$store.state.dotCount=0;
+                                    }
+                                })
+                        }
 
-            }
+                    }
+                })
+
         },
         created() {
 
+
+        },
+        data() {
+            return {}
         },
         methods: {
             toHome() {
@@ -103,11 +128,26 @@
                 let obj = that.$router.resolve("/home");
                 window.open(obj.href, "_blank");
             },
-            onPopperShow(){
+            toCreate() {
+                let that = this;
+                let obj = that.$router.resolve("/create");
+                window.open(obj.href, "_blank");
+            },
+            onPopperShow() {
 
             },
-            onPopperHide(){
+            onPopperHide() {
 
+            }
+        },
+        computed: {
+            memberInfo: function () {
+                let that = this;
+                return that.$store.state.memberInfo;
+            },
+            dotCount: function () {
+                let that = this;
+                return that.$store.state.dotCount;
             }
         }
     }
@@ -267,8 +307,7 @@
         display: none !important;
 
     }
-</style>
-<style>
+
     .ivu-poptip-arrow {
         display: none;
     }
@@ -280,4 +319,7 @@
     .ivu-poptip-body-content {
         overflow: hidden;
     }
+</style>
+<style>
+
 </style>

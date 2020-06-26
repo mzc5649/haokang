@@ -2,7 +2,9 @@ import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 import Home from "../views/Home.vue";
 import Member from "../views/Member.vue";
+import MemberDetail from "../views/MemberDetail.vue";
 import Video from "../views/Video.vue";
+import Article from "../views/Article.vue";
 import VideoInfo from "../views/VideoInfo.vue";
 import VideoAdd from "../views/VideoAdd.vue";
 import VideoDetail from "../views/VideoDetail.vue";
@@ -17,6 +19,16 @@ const routes: Array<RouteConfig> = [
         path: 'member',
         name: 'Member',
         component: Member
+      },
+      {
+        path: 'memberDetail',
+        name: 'MemberDetail',
+        component: MemberDetail
+      },
+      {
+        path: 'article',
+        name: 'Article',
+        component: Article
       },
       {
         path: 'video',

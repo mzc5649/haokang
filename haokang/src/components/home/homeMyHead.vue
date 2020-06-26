@@ -59,6 +59,10 @@
                 loading: false
             }
         },
+        created() {
+            let that=this;
+            that.$store.state.memberIconSrc=that.$store.state.memberInfo.icon;
+        },
         computed: {
             member: function () {
                 let that = this;
@@ -79,7 +83,7 @@
                 }
                 file.src = this.convertSrc(file);
                 that.imageFile = file;
-                that.$store.state.memberIconSrc = file.src;
+                that.$storen.state.memberIconSrc = file.src;
                 that.uptBtnAvailable = true;
                 return false;
             },

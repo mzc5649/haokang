@@ -8,7 +8,7 @@
                 <span v-text="member.username"></span>
             </FormItem>
             <FormItem label="我的签名">
-                <Input type="textarea" maxlength="100" :autosize="true" v-model="member.sign" show-word-limit></Input>
+                <Input type="textarea" maxlength="100" :autosize="true" v-model="member.sign" ></Input>
             </FormItem>
             <FormItem label="性别">
                 <RadioGroup v-model="member.gender" type="button">

@@ -1,7 +1,7 @@
 <template>
     <div class="index">
         <Layout id="layout">
-                <NavBar :member-info="memberInfo" :is-login="isLogin"></NavBar>
+            <NavBar :is-login="isLogin"></NavBar>
             <Content id="content">
                 <Row style="display: flex;justify-content: space-between">
                     <Col span="15">
@@ -13,7 +13,7 @@
                                     {{videoData.createTime}}
                                 </div>
                                 <div style="display: flex;margin-top: 12px;">
-                                    {{videoData.viewCount}}播放
+                                    {{videoData.viewCount}}播放·{{dmNum}}弹幕
                                 </div>
                             </div>
                         </div>
@@ -52,35 +52,64 @@
                                             leave-active-class="animate__animated animate__zoomOut"
 
                                 >
-                                    <SendDMLzr v-if="dm.isControlShow" @sendDanMu="sendDM"
+                                    <SendDMLzr v-if="dm.isControlShow" :is-login="isLogin" @sendDanMu="sendDM"
                                                @switchDmShow="switchDmShow"></SendDMLzr>
                                 </transition>
+                            </div>
+                            <!--点赞-->
+                            <div style="height: 30px;line-height:30px;text-align: left;margin: 10px 0">
+                                支持作者
+                                <span class="star" v-if="!isStar" @click="starVideo">
+                                    <Tooltip content="点赞该视频">
+                                        <Icon type="ios-thumbs-up" style="font-size: 30px;"/>
+                                    {{starNum}}
+                                    </Tooltip>
+
+                                </span>
+                                <span v-else style="cursor: pointer" @click="unStarVideo">
+                                     <Tooltip content="取消点赞">
+                                      <Icon type="ios-thumbs-up" color="#1890ff" style="font-size: 30px;"/>
+                                    {{starNum}}
+                                     </Tooltip>
+                                </span>
+
                             </div>
                         </div>
 
                         <div class="videoDesc">
                             {{videoData.videoDescribe}}
                         </div>
+                        <!--瞄点-->
+                        <a name="comment"></a>
                         <!--评论发布-->
-                        <div class="comment-area">
-                            <div class="input-chat">
-                                <div class="input-chat-inside">
-                                    <img src="/img/userhead.png" style="width: 48px; height: 48px;border-radius: 50%;"/>
-                                    <Input v-model="inputVideoComment" type="textarea"
-                                           style="margin-left: 32px;margin-right: 10px"
-                                           placeholder="请自觉遵守互联网相关的政策法规，严禁发布色情、暴力、反动的言论。"
-                                           show-word-limit
-                                           maxlength="200"
-                                    ></Input>
-                                    <Button type="primary" @click="sendVideoComment">发表评论</Button>
+                        <Form style="position: relative" :disabled="!isLogin">
+                            <div class="comment-area">
+                                <div class="input-chat">
+                                    <div class="input-chat-inside">
+                                        <Avatar :src="$store.state.memberInfo.icon" icon="ios-person"
+                                                style="min-width: 48px; min-height: 48px;border-radius: 50%;font-size: 24px;line-height: 48px"/>
+                                        <Input v-model="inputVideoComment" type="textarea"
+                                               style="margin-left: 32px;margin-right: 10px"
+                                               placeholder="请自觉遵守互联网相关的政策法规，严禁发布色情、暴力、反动的言论。"
+                                               show-word-limit
+                                               maxlength="200"
+                                        ></Input>
+                                        <Button type="primary" @click="sendVideoComment">发表评论</Button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                            <span v-show="!isLogin" class="sendCommentShadow">请先<router-link to="/login"
+                                                                                             target="_blank">登录</router-link>或<router-link
+                                    to="/register" target="_blank">注册</router-link></span>
+                        </Form>
                         <div>
                             <!--评论列表-->
-                            <template v-for="(item) in videoCommentData">
-                                <CommentZzj :key="item.id" :video-comment="item"></CommentZzj>
-                            </template>
+                            <div style="position: relative">
+                                <Spin size="large" fix v-if="commentSpin"></Spin>
+                                <template v-for="(item) in videoCommentData" v-cloak>
+                                    <CommentZzj :is-login="isLogin" :key="item.id" :video-comment="item"></CommentZzj>
+                                </template>
+                            </div>
                             <!-- 分页导航-->
                             <Page :total="videoCommentPage.total"
                                   :page-size="videoCommentPage.pageNum"
@@ -91,8 +120,8 @@
                         </div>
 
                     </Col>
-                    <Col span="8" style="border: 1px blue solid">
-
+                    <Col span="8">
+                        <AuthorCard :author="author"></AuthorCard>
                     </Col>
 
                 </Row>
@@ -103,7 +132,7 @@
             </Footer>
         </Layout>
 
-        <BackTop :height="100" :bottom="150">
+        <BackTop :height="100" :bottom="10">
             <div class="top">返回顶端</div>
         </BackTop>
 
@@ -119,15 +148,21 @@
     import SendDMLzr from "../components/video/sendDM-lzr";
     import CommentZzj from "../components/video/comment-zzj";
     import NavBar from "../components/NavBar";
+    import AuthorCard from "../components/AuthorCard";
 
     export default {
         name: "Video",
         data() {
             return {
+                isStar: false,
+                starNum: 0,
+                dmNum:0,
+                commentSpin: true,
                 id: '',
                 videoData: {
-                    videoClassify:{}
+                    videoClassify: {}
                 },
+                author: {},
                 videoCommentData: [],
                 videoCommentPage: {
                     total: 0,
@@ -143,7 +178,7 @@
                     data: []
                 },
                 spinShow: false,
-                spinShow1:true,
+                spinShow1: true,
                 firstPlay: true,
                 isJs: false,
                 direction: 'default',
@@ -166,17 +201,16 @@
                         fullscreenToggle: true  //全屏按钮
                     }
                 },
-                memberInfo:{},
-                isLogin:false
+                isLogin: false
             }
         },
-        components: {NavBar, CommentZzj, SendDMLzr, FooterZzj, videoPlayer, VBarrage},
+        components: {AuthorCard, NavBar, CommentZzj, SendDMLzr, FooterZzj, videoPlayer, VBarrage},
         methods: {
             //播放视频
             onPlayerPlay: function () {
                 let that = this;
                 if (that.firstPlay) {
-                    that.axios.post("/video/v/viewCount/"+that.videoData.id)
+                    that.axios.post("/video/v/viewCount/" + that.videoData.id)
                 }
                 //开启弹幕
                 that.dmOpen();
@@ -241,7 +275,9 @@
             dmOpen() {
                 let that = this;
                 let videoPlayer = that.$refs.videoPlayer;
+                //暂停弹幕
                 that.dm.isPause = false;
+                //第一次播放
                 if (that.firstPlay) {
                     videoPlayer.getElementsByTagName('video')[0].pause();
                     that.spinShow = true;
@@ -254,10 +290,8 @@
                             videoPlayer.getElementsByTagName('video')[0].play();
                             that.dm.isControlShow = true;
                             that.firstPlay = false;
-                            // that.dm.isShow = true;
+                             that.dm.isShow = true;
                         });
-
-
                 }
 
             },
@@ -287,8 +321,10 @@
                         if (res.data.code == 0) {
                             that.$Message.success("评论成功");
                             that.inputVideoComment = '';
+                            //刷新评论区
+                            that.getVideoCommentData();
                         } else {
-                            that.$Message.error("评论成功");
+                            that.$Message.error("评论失败");
                         }
                     }).catch(function () {
                     that.$Message.error("评论失败");
@@ -297,8 +333,10 @@
             //切换页码时出发
             pageChange(currentPage) {
                 let that = this;
+                that.commentSpin = true;
                 that.videoCommentPage.currentPage = currentPage;
                 that.getVideoCommentData()
+                window.location.href = "#comment";
             },
             getVideoCommentData() {
                 let that = this;
@@ -317,23 +355,102 @@
                     },)
                     .then(function (res) {
                         that.videoCommentData = res.data.data;
+                        that.commentSpin = false;
                     });
+            },
+            //点赞视频
+            starVideo() {
+                let that = this;
+                //是否登录
+                if (that.isLogin == true) {
+                    let vid = that.videoData.id;
+                    let mid = that.$store.state.m_id;
+                    //点赞
+                    that.axios.post("/video/v/star", null, {
+                        params: {
+                            vid: vid,
+                            mid: mid
+                        }
+                    }).then(function (res) {
+                        if (res.data.code == 0) {
+                            if (res.data.data == 0) {
+                                that.isStar = true;
+                                that.$Message.success("点赞成功，感谢您的支持")
+                                that.starNum = that.starNum + 1;
+                            } else {
+                                that.isStar = false;
+                                that.$Message.success("成功取消点赞")
+                                that.starNum = that.starNum - 1;
+                            }
+                        }
+                    })
+                } else {
+                    alert("请先登录")
+                }
+
+            },
+            //取消点赞视频
+            unStarVideo() {
+                let that = this;
+                //是否登录
+                if (that.isLogin == true) {
+                    let vid = that.videoData.id;
+                    let mid = that.$store.state.m_id;
+                    //点赞
+                    that.axios.post("/video/v/star", null, {
+                        params: {
+                            vid: vid,
+                            mid: mid
+                        }
+                    }).then(function (res) {
+                        if (res.data.code == 0) {
+                            if (res.data.data == 0) {
+                                that.isStar = true;
+                                that.$Message.success("点赞成功，感谢您的支持")
+                                that.starNum = that.starNum + 1;
+
+                            } else {
+                                that.isStar = false;
+                                that.$Message.success("成功取消点赞")
+                                that.starNum = that.starNum - 1;
+                            }
+                        }
+                    })
+                } else {
+                    alert("请先登录")
+                }
             }
 
         },
         created() {
             let that = this;
+            //视频id
+            that.id = that.$route.query.videoId;
             //是否登录
             that.axios.post("/member/m/loginOrNot")
                 .then(function (res) {
                     if (res.data.code == 0) {
                         that.$store.state.m_id = res.data.data;
+                        window.sessionStorage.setItem("m_id", res.data.data);
                         that.isLogin = true;
                         that.showLogin = false;
+                        //获取该视频 用户是否点赞
+                        that.axios.get("/video/v/isStar", {
+                            params: {
+                                vid: that.id,
+                                mid: res.data.data
+                            }
+                        }).then(function (res) {
+                            if (res.data.code == 0) {
+                                that.isStar = res.data.data;
+                            }
+                        })
+                        //获取该用户信息
                         that.axios.get("/member/m/" + that.$store.state.m_id)
                             .then(function (res) {
                                 if (res.data.code == 0) {
-                                    that.memberInfo = res.data.data;
+                                    that.$store.state.memberInfo = res.data.data;
+                                    that.$store.state.memberIconSrc = res.data.data.icon;
                                 }
 
                             })
@@ -342,15 +459,38 @@
                         that.showLogin = true;
                     }
                 })
-            that.id = that.$route.query.videoId;
+            //获取该视频点赞数量
+            that.axios.get("/video/v/star/vid/" + that.id)
+                .then(function (res) {
+                    if (res.data.code == 0) {
+                        that.starNum = res.data.data;
+                    }
+                })
+            //获取该视频弹幕数量
+            that.axios.get("/video/dm/count/vid/" + that.id)
+                .then(function (res) {
+                    if (res.data.code == 0) {
+                        that.dmNum=res.data.data;
+                    }
+                })
             //获取视频信息
             that.axios.get('/video/v/' + that.id,)
                 .then(function (res) {
                     that.videoData = res.data.data;
+                    let m_id = res.data.data.member_id;
+                    //获取该用户信息
+                    that.axios.get("/member/m/" + m_id)
+                        .then(function (res) {
+                            if (res.data.code == 0) {
+                                that.author = res.data.data;
+                            }
+                        })
+
+
                     that.playerOptions.poster = that.videoData.viewCoverUrl;
                     that.playerOptions.sources[0].src = that.videoData.videoContent.videoUrl;
-                    that.spinShow1=false;
-                    document.title=that.videoData.title
+                    that.spinShow1 = false;
+                    document.title = that.videoData.title
                 });
             //获取评论总数
             that.axios.get('/video/vcom/count/vid/' + that.id)
@@ -367,13 +507,20 @@
                 },)
                 .then(function (res) {
                     that.videoCommentData = res.data.data;
+                    that.commentSpin = false;
                 });
-        },
-        mounted() {
-            window.scrollTo(0,0);
 
         },
-        computed: {}
+        mounted() {
+            window.scrollTo(0, 0);
+
+        },
+        computed: {
+            memberInfo: function () {
+                let that = this;
+                return that.$store.state.memberInfo;
+            }
+        }
     }
 
 </script>
@@ -382,7 +529,8 @@
     .video {
         position: relative;
         width: 100%;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
+        box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+
     }
 
     #header {
@@ -395,7 +543,7 @@
     }
 
     #content {
-        padding: 0 100px;
+        padding: 0 160px;
     }
 
     .top {
@@ -431,6 +579,7 @@
     }
 
     .sendDanMuArea {
+        display: flex;
         height: 36px;
         position: relative;
         z-index: 1;
@@ -451,6 +600,25 @@
         text-align: left;
         border-bottom: 1px solid #e5e9ef;
     }
+
+    .sendCommentShadow {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 18px;
+        color: gray;
+    }
+
+    .star {
+        cursor: pointer;
+        color: #757575;
+        height: 30px;
+    }
+
+    .star:hover {
+        color: #1890ff;
+    }
 </style>
 <style>
     .video-js .vjs-big-play-button {
@@ -462,8 +630,12 @@
         left: 50%;
         transform: translate(-50%, -50%);
     }
-    #layout{
+
+    #layout {
         background-color: white;
     }
 
+    [v-cloak] {
+        display: none
+    }
 </style>

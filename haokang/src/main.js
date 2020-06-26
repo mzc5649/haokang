@@ -9,9 +9,13 @@ import "aos/dist/aos.css"
 import animated from 'animate.css'
 import axios from 'axios'
 import Video from 'video.js'
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
+// use
 Vue.prototype.$video = Video
 Vue.prototype.axios = axios;
 Vue.use(animated)
+Vue.use(mavonEditor)
 Vue.config.productionTip = false;
 Vue.use(ViewUI);
 Vue.use(AOS);

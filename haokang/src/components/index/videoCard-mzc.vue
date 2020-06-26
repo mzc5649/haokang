@@ -21,7 +21,6 @@
         name: "videoCard-mzc",
         props: {
             videoData: Object,
-
         },
         data() {
             return {
@@ -33,7 +32,7 @@
                 let that=this;
                 let obj=that.$router.resolve(
                     {
-                        path: '/video',
+                        path: '/v',
                         query: {
                             videoId: that.videoData.id
                         }
@@ -51,7 +50,9 @@
         overflow: hidden;
         margin-bottom: 10px;
     }
-
+    .box-1:hover .title{
+       color: #00a1d6;
+    }
     .box-2 {
         height: 120px;
         background-size: 100%, 120px;
@@ -61,6 +62,7 @@
 
     .title {
         height: 32px;
+        line-height: 16px;
         font-size: 14px;
         color: black;
         text-decoration: none;
@@ -75,9 +77,6 @@
         cursor: pointer;
     }
 
-    .title:hover {
-        color: blue;
-    }
 
     .author {
         height: 20px;
