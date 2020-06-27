@@ -1,5 +1,5 @@
 <template>
-    <div  data-aos="fade-up" class="videoCardRow"
+    <div  class="videoCardRow"
          style="display: flex;padding: 20px; border: 1px solid #dcdee2;border-radius: 6px;margin-bottom: 10px">
         <Row :gutter="20">
             <Col span="10">
@@ -22,8 +22,12 @@
                             {{videoData.member.nickname}}
                         </span>
                         <span style="float: right">
-                           <Icon type="logo-youtube"/>
-                        {{videoData.viewCount}}
+                            <span style="margin-right: 10px">
+                           <Icon type="logo-youtube"/>{{videoData.viewCount}}
+                               </span>
+                              <span>
+                            <Icon type="ios-time"/><Time :time="videoData.createTime" :interval="1"/>
+                              </span>
                         </span>
                     </div>
                 </div>
@@ -64,10 +68,12 @@
         color: #00a1d6;
         cursor: pointer;
     }
+
     .videoCardRow:hover {
         box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
     }
-    .videoCardRow:hover .videoA{
+
+    .videoCardRow:hover .videoA {
         color: #00a1d6;;
     }
 </style>

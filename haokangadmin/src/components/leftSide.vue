@@ -6,7 +6,6 @@
                     会员管理
                 </template>
                 <MenuItem name="Member" to="/member">所有会员</MenuItem>
-                <MenuItem name="1-2">新增会员</MenuItem>
             </Submenu>
             <Submenu name="2">
                 <template slot="title">
@@ -23,6 +22,13 @@
                 <MenuItem name="Article" to="/article">所有文章</MenuItem>
             </Submenu>
             <Submenu name="4">
+                <template slot="title">
+                    <Icon type="ios-people" />
+                   分类管理
+                </template>
+                <MenuItem name="Classify" to="/classify">所有分类</MenuItem>
+            </Submenu>
+            <Submenu name="5">
                 <template slot="title">
                     <Icon type="ios-stats" />
                     统计分析

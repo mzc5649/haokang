@@ -9,7 +9,7 @@
                 <template v-for="(item,index) in classifyData">
                     <SortMzc :key="index">
                         <template v-slot:sort>
-                            {{item.classifyName}}
+                            <Divider orientation="left"><span style="font-size: 20px">{{item.classifyName}}</span></Divider>
                         </template>
                         <!--视频-->
                         <template v-slot:video>
@@ -46,7 +46,7 @@
         components: {NavBar, SortMzc, FooterZzj, VideoMzc, RecommendMzc, ClassifyMzc, ArticleMzc},
         data() {
             return {
-                checkId:'0',
+                checkId: '0',
                 classifyData: [],
                 value1: 0,
                 videoHotData: [],
@@ -63,14 +63,14 @@
                 .then(function (res) {
                     if (res.data.code == 0) {
                         that.$store.state.m_id = res.data.data;
-                        window.sessionStorage.setItem("m_id",res.data.data),
-                        that.isLogin = true;
+                        window.sessionStorage.setItem("m_id", res.data.data),
+                            that.isLogin = true;
                         //查询用户
                         that.axios.get("/member/m/" + that.$store.state.m_id)
                             .then(function (res) {
                                 if (res.data.code == 0) {
                                     that.$store.state.memberInfo = res.data.data;
-                                    that.$store.state.memberIconSrc =res.data.data.icon;
+                                    that.$store.state.memberIconSrc = res.data.data.icon;
                                 }
                             })
                     } else {
@@ -110,7 +110,7 @@
 
 </script>
 <style>
-    .ivu-list-item-meta-title{
+    .ivu-list-item-meta-title {
         height: 24px;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -124,6 +124,7 @@
 
     .index {
         font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+        min-width: 1200px;
     }
 
     #content {

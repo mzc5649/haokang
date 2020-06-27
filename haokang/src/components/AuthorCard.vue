@@ -1,7 +1,12 @@
 <template>
+    <div >
+        <div style="text-align: left;font-size: 18px;height: 30px;line-height: 30px">
+            <Icon type="ios-ribbon" size="30" style="margin-right: 10px"/>发布者
+        </div>
+
     <div class="box">
         <div class="bg">
-            <img style="width: 100%;height: 100px" src="/img/bg.png" />
+            <img style="width: 100%;height: 100px" src="/img/user/bg1.png" />
         </div>
         <div style="display: flex;justify-content: space-between;padding:0 10px">
             <div class="image">
@@ -26,6 +31,7 @@
                 <span style="font-weight: bold;">{{author.account}}</span>
             </div>
         </div>
+    </div>
     </div>
 </template>
 

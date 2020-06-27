@@ -1,10 +1,13 @@
 <template>
     <div>
         <NavBar :is-login="isLogin"></NavBar>
-        <ClassifyMzc :data="classifyData" :check-id="classifyId"></ClassifyMzc>
         <div id="content">
+        <ClassifyMzc :data="classifyData" :check-id="classifyId"></ClassifyMzc>
             <Row :gutter="20">
                 <Col span="16">
+                    <div style="height: 30px;line-height: 30px;display: flex;align-items: center;font-size: 18px">
+                        <Icon type="logo-youtube" size="30" style="margin-right: 10px"/>视频
+                    </div>
                     <Row style="overflow: hidden" :gutter="10">
                             <Spin fix v-show="videoLoading">
                                 <Icon type="ios-loading" size=18 style="animation: ani-demo-spin 1s linear infinite;"></Icon>
@@ -25,13 +28,14 @@
                           show-elevator/>
                 </Col>
                 <Col span="8" style="text-align: left">
-                    <Spin fix v-show="articleLoading">
-                        <Icon type="ios-loading" size=18 style="animation: ani-demo-spin 1s linear infinite;"></Icon>
-                        <div>Loading</div>
-                    </Spin>
+                    <div style="display: flex;height: 30px;align-items: center;font-size: 18px"><Icon type="ios-book" size="30" style="margin-right: 10px" />文章</div>
                     <List item-layout="vertical" :border="true" size="small">
+                        <Spin fix v-show="articleLoading">
+                            <Icon type="ios-loading" size=18 style="animation: ani-demo-spin 1s linear infinite;"></Icon>
+                            <div>Loading</div>
+                        </Spin>
                         <ListItem v-for="item in articleData" :key="item.id" class="articleCard"
-                                  @click.native="toArticle(item.id)" style="cursor: pointer" data-aos="fade-up">
+                                  @click.native="toArticle(item.id)" style="cursor: pointer">
                             <ListItemMeta v-if="item.member" :avatar="item.member.icon"
                                           :title="item.title"
                                           style="overflow: hidden;text-overflow: ellipsis;"/>
@@ -41,9 +45,13 @@
                                 {{item.summary}}
                             </div>
                             <template slot="action">
-                                <li style="height: 34px">
+                                <li>
                                     <Icon type="md-eye"/>
                                     {{item.traffic}}
+                                </li>
+                                <li >
+                                <Icon type="ios-time"/>
+                                <Time :time="item.createTime" :interval="1"/>
                                 </li>
                             </template>
                         </ListItem>
@@ -53,7 +61,9 @@
                 </Col>
             </Row>
         </div>
-
+        <Footer>
+            <FooterZzj></FooterZzj>
+        </Footer>
     </div>
 </template>
 
@@ -61,6 +71,7 @@
     import NavBar from "../components/NavBar";
     import ClassifyMzc from "../components/index/classify-mzc";
     import VideoCardRow from "../components/classify/videoCardRow";
+    import FooterZzj from "../components/index/footer-zzj";
 
     export default {
         name: "Classify",
@@ -130,7 +141,7 @@
             that.getVideoData();
             that.getArticleData();
         },
-        components: {VideoCardRow, ClassifyMzc, NavBar},
+        components: {FooterZzj, VideoCardRow, ClassifyMzc, NavBar},
         methods: {
             //获取视频数据
             getVideoData() {

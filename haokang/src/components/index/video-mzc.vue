@@ -2,8 +2,9 @@
     <div  >
         <Row :gutter="10">
             <Col span="16" >
-                <div style="height: 30px;display: flex;justify-content: flex-start;font-size: 18px;padding-left: 16px;align-items: center">
-                    <slot><Icon type="logo-youtube" size="30" style="margin-right: 10px"/>视频</slot>
+                <div style="height: 30px;display: flex;justify-content: space-between;font-size: 18px;padding-left: 16px;align-items: center">
+                    <span style="display: flex;align-items: center;line-height: 30px"><Icon type="logo-youtube" size="30" style="margin-right: 10px"/>视频</span>
+                    <span style="font-size: 14px;margin-right: 16px"><router-link style="color: #999999" target="_blank" :to="'/classify?classifyId='+videoClassify.id">查看更多</router-link></span>
                 </div>
                 <Row :gutter="10" style="padding: 8px 16px;">
                     <template v-for="(item,index) in videoData">

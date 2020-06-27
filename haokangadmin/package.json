@@ -10,6 +10,8 @@
   "dependencies": {
     "axios": "^0.19.2",
     "core-js": "^3.6.5",
+    "mavon-editor": "^2.9.0",
+    "turndown": "^6.0.0",
     "view-design": "^4.2.0",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
@@ -51,7 +53,12 @@
       "ecmaVersion": 2020
     },
     "rules": {
-      "vue/no-parsing-error": [2, { "x-invalid-end-tag": false }],
+      "vue/no-parsing-error": [
+        2,
+        {
+          "x-invalid-end-tag": false
+        }
+      ],
       "prefer-const": 0
     }
   },

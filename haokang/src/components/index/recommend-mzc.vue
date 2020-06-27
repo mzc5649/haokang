@@ -4,21 +4,21 @@
             <Carousel v-model="value1" loop
                       :height="250"
                       dots="inside"
+                      autoplay
+                      :autoplay-speed="5000"
+
             >
                 <CarouselItem>
                     <div class="demo-carousel">
-                        <img src="/horse1.jpg" style="width: 100%;height: 250px">
+                        <img src="/img/lunbo/horse1.jpg" style="width: 100%;height: 250px">
                     </div>
                 </CarouselItem>
                 <CarouselItem>
-                    <div class="demo-carousel">2</div>
+                    <div class="demo-carousel">
+                        <img src="/img/lunbo/horse4.jpg" style="width: 100%;height: 250px">
+                    </div>
                 </CarouselItem>
-                <CarouselItem>
-                    <div class="demo-carousel">3</div>
-                </CarouselItem>
-                <CarouselItem>
-                    <div class="demo-carousel">4</div>
-                </CarouselItem>
+
             </Carousel>
         </Col>
         <Col span="14">

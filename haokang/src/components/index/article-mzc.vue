@@ -3,7 +3,7 @@
         <Row :gutter="10" v-if="isShow" >
             <Col span="24">
                 <div style="height: 30px;display: flex;justify-content: flex-start;font-size: 18px;align-items: center;padding-left:16px ">
-                    <slot>文章</slot>
+                    <slot><Icon type="ios-book" size="30" style="margin-right: 10px" />文章</slot>
                 </div>
                 <Row style="text-align: left" >
                     <List item-layout="vertical" :border="true" size="small" >
@@ -17,9 +17,13 @@
                                 {{item.summary}}
                             </div>
                             <template slot="action">
-                                <li style="height: 34px">
+                                <li>
                                     <Icon type="md-eye"/>
                                     {{item.traffic}}
+                                </li>
+                                <li >
+                                    <Icon type="ios-time"/>
+                                    <Time :time="item.createTime" :interval="1"/>
                                 </li>
                             </template>
                             <template slot="extra">

@@ -106,7 +106,12 @@
         created() {
             // eslint-disable-next-line @typescript-eslint/no-this-alias
             const that = this;
-            that.axios.get('/admin/v/' + that.$route.query.id)
+            let id=that.$route.query.id;
+            if(id==null){
+                alert('数据不存在')
+                return
+            }
+            that.axios.get('/admin/v/' + id)
                 .then(function (res) {
                     that.videoData = res.data.data;
                 }).catch(function () {

@@ -1,5 +1,5 @@
 <template>
-    <div data-aos="fade-up" style="height: 400px;border: 1px solid #dcdee2;border-radius: 6px;padding: 8px 16px;">
+    <div data-aos="fade-up" style="height: 416px;border: 1px solid #dcdee2;border-radius: 6px;padding: 8px 16px;">
         <template v-for="(item,index) in rankData">
             <div v-if="(index+1)==1" :key="index+1">
                 <div :key="index+1" style="display: flex;margin-bottom: 18px" data-aos="fade-left">
@@ -38,9 +38,7 @@
                         <!--弹窗-->
                         <Poptip trigger="hover" placement="top-start" @on-popper-show="onPopperShow(item.member_id)"
                                 :transfer="true">
-
                             {{item.title}}
-
                             <template slot="content">
                                 <VideoCardRank :video-info="item"></VideoCardRank>
                             </template>
@@ -295,6 +293,7 @@
         background-color: #FFFFFF;
         width: 18px;
         height: 18px;
+        min-width: 18px;
         line-height: 18px;
         text-align: center;
         border-radius: 2px;

@@ -122,7 +122,7 @@
                 const that = this;
                 that.$Modal.confirm({
                     title: '删除',
-                    content: '<p>确认删除id为 "' + row.id + '" ,标题为 "' + row.title + '" 的文章吗</p>',
+                    content: '<p>确认删除id为 "<b>' + row.id + '</b>" ,标题为 "<b>' + row.title + '</b>" 的文章吗</p>',
                     loading: true,
                     onOk: () => {
                         that.axios.delete('/admin/v/' + row.id)
@@ -151,7 +151,6 @@
                 that.loading = true;
                 that.videoPage.currentPage = index;
                 that.getVideoData()
-
             },
             getVideoData() {
                 // eslint-disable-next-line @typescript-eslint/no-this-alias

@@ -102,7 +102,6 @@
                         if(id!=null){
                             that.axios.get("/video/m/sign/"+id)
                                 .then(function (res) {
-                                    console.log(res.data)
                                     if (res.data.code == 0) {
                                         that.$store.state.dotCount=1;
                                     }else{

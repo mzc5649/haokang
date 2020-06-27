@@ -27,6 +27,7 @@
                                                v-model="loginForm.password"
                                                placeholder="请输入密码"
                                                password
+                                               @keyup.enter.native="login('form')"
                                         >
                                         </Input>
                                     </FormItem>

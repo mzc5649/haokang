@@ -6,7 +6,7 @@
             </FormItem>
             <FormItem label="头像">
                 <div class="image">
-                    <Avatar :src="memberData.icon" size="60"></Avatar>
+                    <Avatar :src="memberData.icon" size="60" style="line-height: 30px"></Avatar>
                     <div class="image-cover">
                         <Icon type="ios-eye-outline" @click="handleView()"></Icon>
                     </div>
@@ -58,7 +58,7 @@
                     <Button type="primary" @click="uptBtn">修改</Button>
                 </span>
                 <span v-else>
-                     <Button type="success" @click="submitBtn">提交</Button>
+                     <Button type="success" @click="submitBtn" >提交</Button>
                      <Button type="warning" style="margin-left: 5px" @click="cancelUptBtn">取消</Button>
                 </span>
             </FormItem>
@@ -89,7 +89,7 @@
                     icon: '',
                     birthday: '',
                     sign: '',
-                    account: ''
+                    account: 0
                 }
             }
         },
@@ -156,12 +156,41 @@
                     that.$Message.warning("签名不能为空");
                     return;
                 }
-                if(that.memberData.account==''){
+                if(that.memberData.account===''){
                     that.$Message.warning("金币不能为空");
                     return;
                 }
-                console.log(that.memberData)
-
+                that.$Modal.confirm({
+                    title: '修改',
+                    content: '<p>确认修改吗</p>',
+                    loading: true,
+                    onOk: () => {
+                        let formData = new FormData();
+                        formData.append('id', that.memberData.id);
+                        formData.append('nickname', that.memberData.nickname);
+                        formData.append('password', that.memberData.password);
+                        formData.append('gender', that.memberData.gender);
+                        formData.append('sign', that.memberData.sign);
+                        formData.append('birthday', that.memberData.birthday);
+                        formData.append('account', that.memberData.account);
+                        if(that.image!=''){
+                            formData.append('imageFile', that.image);
+                        }
+                        let config = {
+                            //添加请求头
+                            headers: {"Content-Type": "multipart/form-data"}
+                        }
+                        that.axios.put('/admin/me/',formData,config)
+                            .then(function () {
+                                that.$Modal.remove();
+                                that.$Message.success("修改成功")
+                                that.isUpdate=false;
+                            }).catch(function () {
+                            that.$Modal.remove();
+                            that.$Message.error("修改失败")
+                        })
+                    }
+                });
             },
             //上传图片前
             beforeImageUpload(file) {

@@ -7,7 +7,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         danMuList: [],//弹幕列表
-        m_id:'', //当前登录用户id
+        m_id:0, //当前登录用户id
         memberInfo:{},
         memberIconSrc:'',
         dotCount:0,

@@ -5,9 +5,11 @@ import Member from "../views/Member.vue";
 import MemberDetail from "../views/MemberDetail.vue";
 import Video from "../views/Video.vue";
 import Article from "../views/Article.vue";
+import ArticleInfo from "../views/ArticleInfo.vue";
+import ArticleDetail from "../views/ArticleDetail.vue";
 import VideoInfo from "../views/VideoInfo.vue";
-import VideoAdd from "../views/VideoAdd.vue";
 import VideoDetail from "../views/VideoDetail.vue";
+import Classify from "../views/Classify.vue";
 Vue.use(VueRouter);
 const routes: Array<RouteConfig> = [
   {
@@ -28,8 +30,21 @@ const routes: Array<RouteConfig> = [
       {
         path: 'article',
         name: 'Article',
-        component: Article
+        component: Article,
+        children:[
+          {
+            path: 'articleInfo',
+            name: 'ArticleInfo',
+            component: ArticleInfo
+          },
+          {
+            path: 'articleDetail',
+            name: 'ArticleDetail',
+            component: ArticleDetail
+          },
+        ]
       },
+
       {
         path: 'video',
         name: 'Video',
@@ -45,13 +60,12 @@ const routes: Array<RouteConfig> = [
             name: 'VideoDetail',
             component: VideoDetail
           },
-
         ]
       },
       {
-        path: 'videoAdd',
-        name: 'VideoAdd',
-        component: VideoAdd
+        path: 'classify',
+        name: 'Classify',
+        component: Classify
       }
     ]
   },

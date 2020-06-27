@@ -4,6 +4,9 @@ import router from "./router";
 import store from "./store";
 import ViewUI from 'view-design';
 import 'view-design/dist/styles/iview.css';
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
+Vue.use(mavonEditor)
 Vue.use(ViewUI);
 Vue.config.productionTip = false;
 import axios from 'axios'

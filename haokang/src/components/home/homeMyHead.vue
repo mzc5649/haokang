@@ -83,7 +83,7 @@
                 }
                 file.src = this.convertSrc(file);
                 that.imageFile = file;
-                that.$storen.state.memberIconSrc = file.src;
+                that.$store.state.memberIconSrc = file.src;
                 that.uptBtnAvailable = true;
                 return false;
             },

@@ -1,7 +1,6 @@
 <template>
     <Layout id="layout">
         <Content>
-
             <div class="box">
                 <div class="title">
                     <img style="height: 106px;" src="/img/login/title.png"/>
@@ -26,6 +25,7 @@
                                                v-model="form.password"
                                                placeholder="请输入密码(6-16字符组成，区分大小写)"
                                                password
+                                               @keyup.enter.native="register('form')"
                                         >
                                         </Input>
                                     </FormItem>

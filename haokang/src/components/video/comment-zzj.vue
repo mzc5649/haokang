@@ -35,6 +35,7 @@
                                    placeholder="请自觉遵守互联网相关的政策法规，严禁发布色情、暴力、反动的言论。"
                                    show-word-limit
                                    maxlength="200"
+                                   @keyup.enter.native="sendReplyComment('form')"
                             ></Input>
                             <Button type="primary" @click="sendReplyComment">发表评论</Button>
                             <span v-show="!isLogin" class="sendRplyCommentShadow">请先<router-link to="/login"

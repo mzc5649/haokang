@@ -46,11 +46,11 @@
                                 ></v-barrage>
 
                             </div>
+                            <!--发送弹幕-->
                             <div class="sendDanMuArea">
                                 <transition name="custom-classes-transition"
                                             enter-active-class="animate__animated animate__zoomIn"
                                             leave-active-class="animate__animated animate__zoomOut"
-
                                 >
                                     <SendDMLzr v-if="dm.isControlShow" :is-login="isLogin" @sendDanMu="sendDM"
                                                @switchDmShow="switchDmShow"></SendDMLzr>
@@ -93,6 +93,7 @@
                                                placeholder="请自觉遵守互联网相关的政策法规，严禁发布色情、暴力、反动的言论。"
                                                show-word-limit
                                                maxlength="200"
+                                               @keyup.enter.native="sendVideoComment"
                                         ></Input>
                                         <Button type="primary" @click="sendVideoComment">发表评论</Button>
                                     </div>
@@ -121,7 +122,10 @@
 
                     </Col>
                     <Col span="8">
-                        <AuthorCard :author="author"></AuthorCard>
+                        <Affix>
+                            <AuthorCard :author="author"></AuthorCard>
+                        </Affix>
+
                     </Col>
 
                 </Row>

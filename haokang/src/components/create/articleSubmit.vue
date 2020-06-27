@@ -166,7 +166,7 @@
                 let that = this;
                 that.form.title = '';
                 that.classifyId = '';
-                that.content= '';
+                that.form.content= '';
                 that.image = '';
                 that.imageExist=false;
                 that.formDisabled = false;

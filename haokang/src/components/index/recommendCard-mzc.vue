@@ -1,10 +1,10 @@
 <template>
-    <div class="info-box" @click="toVideo" :style="{'background-image':'url('+info.viewCoverUrl+')','background-size':'100% 120px'}">
+    <div class="info-box" @click="toVideo" :style="{'background-image':'url('+info.viewCoverUrl+')','background-size':'cover'}">
         <div class="info-box1">
             <div style="height: 100%;width: 90%;text-align: left;margin:0 auto;display: flex;flex-direction: column;justify-content: space-between">
-                <p style="margin-top: 10px;font-size: 16px">{{info.title}}</p>
-                <p style="color: #e0e0e0; font-size: 12px;">{{info.member.nickname}}
-                <p style="font-size: 12px;color: #e0e0e0">{{info.viewCount}}播放</p>
+                <p style="margin-top: 10px;font-size: 14px;color: white;">{{info.title}}</p>
+                <p style=" font-size: 12px;color: white;">{{info.member.nickname}}
+                <p style="font-size: 12px;color: white;"><span>{{info.viewCount}}播放</span><span style="float: right"> <Time :time="info.createTime" :interval="1" /></span></p>
             </div>
         </div>
     </div>

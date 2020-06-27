@@ -4,7 +4,7 @@
         <Content id="content">
             <Row style="display: flex;justify-content: space-between">
                 <Col span="15">
-                    <div class="box">
+                    <div class="box" style="padding-bottom: 10px">
                         <div class="title">
                             <h1>{{articleInfo.title}}</h1>
                         </div>
@@ -18,24 +18,30 @@
                         </div>
                         <div class="markdown-body articleContent" v-html="articleInfo.articleContent.content" style="text-align: left;padding: 20px 20px;">
                         </div>
-                        <div  style="border-top: 1px solid red">本文禁止转载或摘编</div>
+                        <Divider orientation="center"><span style="color: #999999">本文禁止转载或摘编</span></Divider>
                     </div>
                 </Col>
                 <Col span="8">
-                    <AuthorCard :author="author"></AuthorCard>
+                    <Affix>
+                        <AuthorCard :author="author"></AuthorCard>
+                    </Affix>
+
                 </Col>
             </Row>
-
         </Content>
         <BackTop :height="100" :bottom="10">
             <div class="top">返回顶端</div>
         </BackTop>
+        <Footer id="footer">
+            <FooterZzj></FooterZzj>
+        </Footer>
     </Layout>
 </template>
 
 <script>
     import NavBar from "../components/NavBar";
     import AuthorCard from "../components/AuthorCard";
+    import FooterZzj from "../components/index/footer-zzj";
 
 
     export default {
@@ -91,15 +97,13 @@
                                 that.author=res.data.data;
                             }
                         })
-
-
                 })
         },
         mounted() {
 
 
         },
-        components: {AuthorCard, NavBar}
+        components: {FooterZzj, AuthorCard, NavBar}
     }
 </script>
 
