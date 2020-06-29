@@ -1,5 +1,5 @@
 <template>
-    <Layout>
+    <Layout id="layout">
         <NavBar :is-login="isLogin"></NavBar>
         <Content id="content">
             <Row>
@@ -72,5 +72,8 @@
     #content {
         background-color: white;
         padding:0 160px
+    }
+    #layout{
+        min-width: 1200px;
     }
 </style>

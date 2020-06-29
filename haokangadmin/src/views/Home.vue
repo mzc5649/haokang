@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <Layout>
-      <Header>Header</Header>
+      <Header><div style="color: white;font-size: 18px">好康后台管理系统</div></Header>
       <Layout>
         <Sider >
         <LeftSide style="width: 100%"></LeftSide>
@@ -12,7 +12,7 @@
 
         </Content>
       </Layout>
-      <Footer>Footer</Footer>
+      <Footer>芜湖起飞小组</Footer>
     </Layout>
   </div>
 </template>

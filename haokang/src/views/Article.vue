@@ -114,6 +114,7 @@
 
     #layout {
         background-color: white;
+        min-width: 1200px;
     }
 
     .box {

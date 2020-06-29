@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="min-width: 1200px;">
         <NavBar :is-login="isLogin"></NavBar>
         <div id="content">
         <ClassifyMzc :data="classifyData" :check-id="classifyId"></ClassifyMzc>

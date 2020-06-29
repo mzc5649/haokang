@@ -100,6 +100,9 @@
         padding: 0 160px;
         background-color: white;
     }
+    #layout{
+        min-width: 1200px;
+    }
 </style>
 <style>
 </style>
